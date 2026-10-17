@@ -31,7 +31,7 @@ class _PortfolioPageState extends State<PortfolioPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.outerBackdrop,
       body: AnimatedBuilder(
         animation: widget.controller,
         builder: (context, _) {

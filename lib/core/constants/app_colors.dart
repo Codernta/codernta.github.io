@@ -1,16 +1,37 @@
 import 'package:flutter/material.dart';
 
-/// Centralized color palette matching the Stitch portfolio design.
+/// Centralized color palette supporting the editorial / neo-brutalist portfolio design.
 class AppColors {
   const AppColors._();
 
+  // Outer Editorial Framing
+  static const Color outerBackdrop = Color(0xFF6E7176);
+  static const Color outerFrameText = Color(0xFFE5E7EB);
+  static const Color canvasDark = Color(0xFF0C0C0E);
+  static const Color canvasSurface = Color(0xFF131317);
+
+  // Backgrounds & Surfaces
   static const Color background = Color(0xFF070708);
-  static const Color backgroundSecondary = Color(0xFF08080A);
-  static const Color card = Color(0xFF111114);
-  static const Color cardHover = Color(0xFF16161B);
-  static const Color border = Color(0xFF232328);
+  static const Color backgroundSecondary = Color(0xFF0C0C0F);
+  static const Color card = Color(0xFF121216);
+  static const Color cardHover = Color(0xFF18181E);
+  static const Color border = Color(0xFF26262E);
   static const Color borderMuted = Color(0xFF1C1C22);
-  static const Color borderBright = Color(0xFF383842);
+  static const Color borderBright = Color(0xFF3F3F4E);
+
+  // Architectural Grid Stage
+  static const Color gridPaper = Color(0xFFF3F2EC);
+  static const Color gridLine = Color(0xFFDAD8CE);
+  static const Color gridText = Color(0xFF1E1E24);
+
+  // Playful Neo-Brutalist Sticker Palette (from inspiration design)
+  static const Color stickerYellow = Color(0xFFFFDE00);
+  static const Color stickerOrange = Color(0xFFFF6200);
+  static const Color stickerPink = Color(0xFFFF2A6D);
+  static const Color stickerCyan = Color(0xFF26C6DA);
+  static const Color stickerMint = Color(0xFFA7F3D0);
+  static const Color stickerLime = Color(0xFFA3E635);
+  static const Color stickerRed = Color(0xFFD8000C);
 
   // Brand Accents
   static const Color flutterPrimary = Color(0xFF02569B);

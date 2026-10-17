@@ -2,9 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
-/// Centralized typography helpers referencing Google Fonts.
+/// Centralized typography helpers supporting the editorial / neo-brutalist portfolio design.
 class AppTypography {
   const AppTypography._();
+
+  // Condensed Headline Font: Bebas Neue (from inspiration image: "PRODUCT DESIGNER")
+  static TextStyle headlineCondensed({
+    double fontSize = 110,
+    Color color = Colors.white,
+    double letterSpacing = 2.0,
+    double? height,
+  }) {
+    return GoogleFonts.bebasNeue(
+      fontSize: fontSize,
+      color: color,
+      letterSpacing: letterSpacing,
+      height: height ?? 0.95,
+    );
+  }
 
   // Display Font: Syne
   static TextStyle displayBold({
@@ -39,34 +54,40 @@ class AppTypography {
     FontWeight fontWeight = FontWeight.normal,
     Color color = AppColors.textPrimary,
     double? height,
+    double? letterSpacing,
   }) {
     return GoogleFonts.spaceGrotesk(
       fontSize: fontSize,
       fontWeight: fontWeight,
       color: color,
       height: height,
+      letterSpacing: letterSpacing,
     );
   }
 
   static TextStyle sansMedium({
     double fontSize = 16,
     Color color = AppColors.textPrimary,
+    double? letterSpacing,
   }) {
     return GoogleFonts.spaceGrotesk(
       fontSize: fontSize,
       fontWeight: FontWeight.w500,
       color: color,
+      letterSpacing: letterSpacing,
     );
   }
 
   static TextStyle sansBold({
     double fontSize = 20,
     Color color = AppColors.textPrimary,
+    double? letterSpacing,
   }) {
     return GoogleFonts.spaceGrotesk(
       fontSize: fontSize,
       fontWeight: FontWeight.w700,
       color: color,
+      letterSpacing: letterSpacing,
     );
   }
 

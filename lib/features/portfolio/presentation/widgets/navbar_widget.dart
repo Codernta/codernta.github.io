@@ -22,7 +22,7 @@ class NavbarWidget extends StatelessWidget {
         child: Container(
           height: 68,
           decoration: BoxDecoration(
-            color: AppColors.backgroundSecondary.withOpacity(0.85),
+            color: AppColors.backgroundSecondary.withValues(alpha: 0.85),
             border: const Border(
               bottom: BorderSide(color: AppColors.border, width: 1),
             ),
@@ -59,10 +59,10 @@ class NavbarWidget extends StatelessWidget {
                               vertical: 3,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColors.flutterCyan.withOpacity(0.12),
+                              color: AppColors.flutterCyan.withValues(alpha: 0.12),
                               borderRadius: BorderRadius.circular(4),
                               border: Border.all(
-                                color: AppColors.flutterCyan.withOpacity(0.3),
+                                color: AppColors.flutterCyan.withValues(alpha: 0.3),
                               ),
                             ),
                             child: Row(
