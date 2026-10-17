@@ -4,17 +4,17 @@ class AppStrings {
 
   static const String appTitle = 'Nithin TA — Senior Flutter Developer | Portfolio';
   static const String developerName = 'Nithin TA';
-  static const String roleTitle = 'Senior Flutter & Dart Specialist';
+  static const String roleTitle = 'Senior Flutter Developer';
   static const String experienceYears = '4+ Years';
-  static const String exCompany = 'Ex-IIC Web Solutions';
+  static const String exCompany = 'Senior Flutter Developer at IIC WebSolutions';
 
   // Hero
   static const String heroTagline = '// SCALABLE MOBILE & CROSS-PLATFORM ARCHITECTURE';
   static const String heroTitleFilled = 'FLUTTER';
   static const String heroTitleStroke = 'DEVELOPER';
-  static const String heroSubtitle = 'Nithin TA / Senior Flutter & Dart Specialist (4+ Years) / Ex-IIC Web Solutions';
+  static const String heroSubtitle = 'Nithin TA / Senior Flutter Developer (4+ Years) / Clean Architecture & AI Specialist';
   static const String heroBio =
-      'Full-stack mobile engineer driven by high frame-rate rendering, clean architecture, and modular state management. Specialized in BLoC, WebSockets, payment rails, and store lifecycle.';
+      'Senior Flutter Developer with 4+ years of experience building scalable Android and iOS applications using Flutter. Experienced in Clean Architecture, BLoC, GetX, Provider, OpenAI integrations, BLE, CI/CD, Firebase, Socket.IO, payment gateways, Google Maps, and performance optimization.';
   static const String availabilityStatus = 'IMMEDIATE';
   static const String noticePeriod = '0 Days (Instant)';
   static const String targetCTC = '₹8.0 LPA';
@@ -30,13 +30,13 @@ class AppStrings {
   static const String statPkgLabel = 'Pub.dev Pkg';
 
   // External URLs
-  static const String githubUrl = 'https://github.com';
-  static const String linkedinUrl = 'https://linkedin.com';
+  static const String githubUrl = 'https://github.com/codernta';
+  static const String linkedinUrl = 'https://linkedin.com/in/codernta';
   static const String mediumUrl = 'https://medium.com/@codernta';
   static const String pubDevUrl = 'https://pub.dev/packages/bharat_fx';
-  static const String portfolioUrl = 'https://codernta.lovable.app';
+  static const String portfolioUrl = 'https://codernta.github.io';
   static const String emailAddress = 'codernta@gmail.com';
-  static const String phoneNumber = '+91 80757 76122';
+  static const String phoneNumber = '+91 8075776122';
   static const String whatsAppUrl = 'https://wa.me/918075776122';
   static const String playStoreBaseUrl = 'https://play.google.com';
 

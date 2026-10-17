@@ -1,14 +1,18 @@
 import '../../domain/entities/open_source_package.dart';
 import '../models/developer_profile_model.dart';
+import '../models/education_item_model.dart';
 import '../models/open_source_package_model.dart';
 import '../models/project_item_model.dart';
 import '../models/skill_category_model.dart';
+import '../models/work_experience_model.dart';
 
 abstract class PortfolioLocalDataSource {
   Future<DeveloperProfileModel> getProfile();
   Future<List<ProjectItemModel>> getProjects();
   Future<List<SkillCategoryModel>> getSkills();
   Future<List<OpenSourcePackageModel>> getOpenSourcePackages();
+  Future<List<WorkExperienceModel>> getExperiences();
+  Future<List<EducationItemModel>> getEducation();
 }
 
 class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
@@ -17,22 +21,23 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
     return const DeveloperProfileModel(
       name: 'Nithin TA',
       title: 'Senior Flutter Developer',
-      subtitle: 'Senior Flutter & Dart Specialist (4+ Years) / Ex-IIC Web Solutions',
+      subtitle: 'Senior Flutter Developer (4+ Years) | Clean Architecture, AI & Cross-Platform Specialist',
       bio:
-          'Full-stack mobile engineer and continuous open-source supporter driven by high frame-rate rendering, clean architecture, and modular state management. Specialized in BLoC, WebSockets, payment rails, and store lifecycle.',
+          'Senior Flutter Developer with 4+ years of experience building scalable Android and iOS applications using Flutter. Experienced in Clean Architecture, BLoC, GetX, Provider, OpenAI integrations, BLE, CI/CD, Firebase, Socket.IO, payment gateways, Google Maps, and performance optimization.',
       availabilityStatus: 'IMMEDIATE',
       noticePeriod: '0 Days (Instant)',
       targetCTC: '₹8.0 LPA',
       currentCTC: '₹6.5 LPA',
       workPreference: 'Remote / Hybrid / Onsite',
-      company: 'IIC Web Solutions Pvt. Ltd.',
-      roleAtCompany: 'Flutter Developer (Remote / Global Distributed Delivery)',
-      tenure: '2020 – PRESENT (4+ YEARS)',
+      company: 'IIC WebSolutions Pvt Ltd',
+      roleAtCompany: 'Senior Flutter Developer',
+      tenure: '06/2025 – PRESENT',
       companyHighlights: [
-        'Spearheaded architecture of 5+ production mobile applications across HealthTech, ExamTech, and Social E-commerce verticals.',
-        'Pioneered bidirectional communication engines utilizing WebSockets & Socket.IO for sub-50ms live chat and vehicle tracking.',
-        'Engineered resilient offline-first storage pipelines combining Hive, SQLite, and Firebase synchronization.',
-        'Automated builds, code analysis, and streamlined releases directly to Google Play Store and Apple TestFlight.',
+        'Integrated OpenAI APIs and AI-powered features directly into mobile workflows.',
+        'Implemented automated CI/CD pipelines for seamless Android and iOS deployments.',
+        'Architected Bluetooth Low Energy (BLE) integrations for hardware communication.',
+        'Engineered scalable REST APIs using Clean Architecture, BLoC, GetX, and Provider.',
+        'Integrated Firebase ecosystem services and rigorously optimized application performance.',
       ],
       stats: {
         'years': '4+',
@@ -44,14 +49,164 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
       },
       contactLinks: {
         'email': 'codernta@gmail.com',
-        'phone': '+91 80757 76122',
-        'github': 'https://github.com',
-        'linkedin': 'https://linkedin.com',
+        'phone': '+91 8075776122',
+        'github': 'https://github.com/codernta',
+        'linkedin': 'https://linkedin.com/in/codernta',
         'medium': 'https://medium.com/@codernta',
-        'portfolio': 'https://codernta.lovable.app',
+        'portfolio': 'https://codernta.github.io',
         'pubdev': 'https://pub.dev/packages/bharat_fx',
       },
     );
+  }
+
+  @override
+  Future<List<WorkExperienceModel>> getExperiences() async {
+    return const [
+      WorkExperienceModel(
+        company: 'IIC WebSolutions Pvt Ltd',
+        location: 'Trivandrum, Kerala',
+        role: 'Senior Flutter Developer',
+        period: '06/2025 – Present',
+        employmentType: 'Full-time',
+        isCurrent: true,
+        highlights: [
+          'Integrated OpenAI APIs and AI-powered features into production workflows.',
+          'Implemented CI/CD pipelines for automated Android and iOS builds and deployments.',
+          'Developed Bluetooth Low Energy (BLE) integrations for seamless device communication.',
+          'Built scalable REST APIs adhering strictly to Clean Architecture, BLoC, GetX, and Provider.',
+          'Integrated Firebase services and optimized app runtime performance and frame stability.',
+        ],
+        technologies: [
+          'Flutter',
+          'Dart',
+          'OpenAI APIs',
+          'BLE',
+          'CI/CD',
+          'BLoC',
+          'GetX',
+          'Provider',
+          'Clean Architecture',
+          'Firebase',
+        ],
+      ),
+      WorkExperienceModel(
+        company: 'Innobayt Innovative Solutions LLC',
+        location: 'Remote, Dubai',
+        role: 'SDE-2 Flutter',
+        period: '11/2024 – 06/2025',
+        employmentType: 'Contract',
+        isCurrent: false,
+        highlights: [
+          'Delivered 3 production-grade Flutter applications from concept to store release.',
+          'Implemented Socket.IO based low-latency real-time chat and push notification systems.',
+          'Built OpenAI-powered intelligent automation modules for business operations.',
+          'Followed Clean Architecture ensuring maintainable, modular, and testable codebases.',
+        ],
+        technologies: [
+          'Flutter',
+          'Dart',
+          'Socket.IO',
+          'OpenAI APIs',
+          'Clean Architecture',
+          'Push Notifications',
+          'REST APIs',
+        ],
+      ),
+      WorkExperienceModel(
+        company: 'UL Technologies Pvt Ltd',
+        location: 'Kerala, India',
+        role: 'Software Engineer – Flutter',
+        period: '03/2024 – 11/2024',
+        employmentType: 'Full-time',
+        isCurrent: false,
+        highlights: [
+          'Architected and built scalable, reusable cross-platform application modules.',
+          'Integrated Firebase services, Google Maps Platform, media streaming, and payment gateways.',
+        ],
+        technologies: [
+          'Flutter',
+          'Dart',
+          'Google Maps',
+          'Firebase',
+          'Media Streaming',
+          'Payment Gateways',
+          'Clean Code',
+        ],
+      ),
+      WorkExperienceModel(
+        company: 'Limenzy Technologies Pvt Ltd',
+        location: 'Kerala, India',
+        role: 'Flutter Developer',
+        period: '06/2022 – 03/2024',
+        employmentType: 'Full-time',
+        isCurrent: false,
+        highlights: [
+          'Developed robust cross-platform mobile applications for Android and iOS.',
+          'Implemented Google Maps location tracking and secure payment gateway SDKs.',
+        ],
+        technologies: [
+          'Flutter',
+          'Dart',
+          'Google Maps',
+          'Payment SDKs',
+          'MVVM',
+          'REST APIs',
+          'Git',
+        ],
+      ),
+    ];
+  }
+
+  @override
+  Future<List<EducationItemModel>> getEducation() async {
+    return const [
+      EducationItemModel(
+        degree: 'BE – Computer Science & Engineering',
+        institution: 'Sasurie Academy of Engineering, Anna University',
+        period: '2010 – 2014',
+        location: 'Tamil Nadu, India',
+      ),
+      EducationItemModel(
+        degree: 'Higher Secondary – Computer Science',
+        institution: 'GVHSS Chorode, Vatakara',
+        period: '2008 – 2010',
+        location: 'Kerala, India',
+      ),
+    ];
+  }
+
+  @override
+  Future<List<SkillCategoryModel>> getSkills() async {
+    return const [
+      SkillCategoryModel(
+        indexLabel: '// 01 STATE & ARCHITECTURE',
+        title: 'State Management & Architecture',
+        description:
+            'Clean Architecture, BLoC (Business Logic Component), GetX reactive controllers, Provider, MVVM, MVC, Dependency Injection (get_it, injectable).',
+        tags: ['Clean Architecture', 'BLoC', 'GetX', 'Provider', 'MVVM', 'SOLID'],
+      ),
+      SkillCategoryModel(
+        indexLabel: '// 02 AI, BLE & HARDWARE',
+        title: 'OpenAI APIs, BLE & IoT',
+        description:
+            'Integrating OpenAI APIs for intelligent automation, Bluetooth Low Energy (BLE) device communication protocols, and hardware peripherals.',
+        tags: ['OpenAI APIs', 'BLE', 'AI Automation', 'Sensors', 'Protocols'],
+      ),
+      SkillCategoryModel(
+        indexLabel: '// 03 REAL-TIME & GEO',
+        title: 'Socket.IO, Google Maps & Media',
+        description:
+            'Live bidirectional messaging via Socket.IO, Google Maps Platform integrations, geofencing, custom marker clusters, background location updates, audio/video streaming.',
+        tags: ['Socket.IO', 'Google Maps', 'Live Tracking', 'Media Streaming'],
+      ),
+      SkillCategoryModel(
+        indexLabel: '// 04 CLOUD, COMMERCE & CI/CD',
+        title: 'CI/CD, Firebase & Payments',
+        description:
+            'Automated CI/CD pipelines for Android & iOS deployments, Firebase Cloud Messaging (FCM), Auth, Firestore, Payment Gateways (Razorpay, Stripe), and Git lifecycle.',
+        tags: ['CI/CD Pipelines', 'Firebase', 'Payment Gateways', 'Git', 'App Store / Play Store'],
+      ),
+    ];
   }
 
   @override
@@ -201,41 +356,6 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
                 'final fy = BharatFiscal.getFinancialYear(DateTime.now()); // FY 2024-25\nfinal nextTaxDue = BharatFiscal.getNextAdvanceTaxDeadline(); // 15-Dec\nfinal settlementDate = BharatFiscal.calculateSettlement(tradeDate, cycle: SettlementCycle.tPlus1);',
           ),
         ],
-      ),
-    ];
-  }
-
-
-  @override
-  Future<List<SkillCategoryModel>> getSkills() async {
-    return const [
-      SkillCategoryModel(
-        indexLabel: '// 01 STATE & ARCHITECTURE',
-        title: 'State Management & Architecture',
-        description:
-            'BLoC (Business Logic Component), GetX reactive controllers, Provider, Clean Architecture, Dependency Injection (get_it, injectable).',
-        tags: ['BLoC', 'GetX', 'SOLID', 'Clean Architecture', 'get_it'],
-      ),
-      SkillCategoryModel(
-        indexLabel: '// 02 REAL-TIME & GEO',
-        title: 'WebSockets & Maps',
-        description:
-            'Live bidirectional messaging via Socket.IO, Google Maps Platform integrations, geofencing, custom marker clusters, background location updates.',
-        tags: ['Socket.IO', 'Google Maps', 'Geofencing', 'Live Tracking'],
-      ),
-      SkillCategoryModel(
-        indexLabel: '// 03 CLOUD & COMMERCE',
-        title: 'Firebase & Payments',
-        description:
-            'Firebase Cloud Messaging (FCM Push Notifications), OAuth, Firestore, Razorpay, Stripe SDKs, and in-app purchase handling.',
-        tags: ['FCM Push', 'Razorpay', 'Stripe', 'Firestore', 'OAuth'],
-      ),
-      SkillCategoryModel(
-        indexLabel: '// 04 PRODUCTION DELIVERY',
-        title: 'App Store Releases',
-        description:
-            'Full lifecycle Play Console & App Store Connect governance, signing keystores, build variants, profiling memory leaks, and performance optimization.',
-        tags: ['Play Store', 'App Store', 'Keystores', 'DevTools', 'CI/CD'],
       ),
     ];
   }

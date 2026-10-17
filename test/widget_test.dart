@@ -23,5 +23,9 @@ void main() {
     expect(find.text('Petbae'), findsOneWidget);
     expect(find.text('Demeter'), findsOneWidget);
     expect(find.text('Dalilin (Go DAW)'), findsOneWidget);
+    expect(find.text('IIC WebSolutions Pvt Ltd'), findsWidgets);
+    expect(find.text('Innobayt Innovative Solutions LLC'), findsOneWidget);
+    expect(find.text('UL Technologies Pvt Ltd'), findsOneWidget);
+    expect(find.text('Limenzy Technologies Pvt Ltd'), findsOneWidget);
   });
 }

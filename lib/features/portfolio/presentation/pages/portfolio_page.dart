@@ -110,6 +110,8 @@ class _PortfolioPageState extends State<PortfolioPage> {
                             ),
                             TimelineExperienceSection(
                               profile: data.profile,
+                              experiences: data.experiences,
+                              education: data.education,
                               skills: data.skills,
                               controller: widget.controller,
                             ),
