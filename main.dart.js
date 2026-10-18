@@ -84424,10 +84424,10 @@ return A.ae(o,m,B.l,o,o,o,o,o,n.f,o,new A.a6(r,s,r,s),o,o,o)},
 Lk(a,b){var s,r,q,p=this,o=null,n=b?B.u:B.z,m=A.bp(100),l=A.br(B.F,1),k=t.p
 m=A.ae(o,A.bd(A.b([B.OK,B.bw,A.S("4+ YEARS SENIOR FLUTTER SPECIALIST",o,o,o,A.bw(B.e,11,o,0.5),o,o)],k),B.u,B.n,B.a7),B.l,o,o,new A.am(B.aD,o,l,m,o,o,B.x),o,o,o,o,B.nZ,o,o,o)
 l=b?B.ef:B.aa
-s=A.S("Hi, Nithin T A\u2014",o,o,o,A.aDh().$5$color$fontSize$fontWeight$height$letterSpacing(B.k,b?36:60,B.eX,1.1,-1),o,o)
+s=A.S("Nithin T A",o,o,o,A.aDh().$5$color$fontSize$fontWeight$height$letterSpacing(B.k,b?36:58,B.eX,1.1,-1),o,o)
 r=p.w
 r===$&&A.a()
-r=A.cX(l,A.b([s,A.cK(r,new A.aks(p,b),o)],k),B.bZ,8,12)
+r=A.cX(l,A.b([s,A.cK(r,new A.aks(p,b),o)],k),B.bZ,10,14)
 l=b?B.aI:B.b6
 l=A.S("Specialized in Clean Architecture, BLoC, high-throughput Socket.IO real-time systems, and 120 FPS custom canvas rendering. Shipped 5+ enterprise and consumer mobile applications with seamless hardware and cloud integration.",o,o,o,A.b8(B.M,b?13:15,B.o,1.6,o),l,o)
 s=b?B.ef:B.aa
@@ -84484,10 +84484,10 @@ n=n.x
 n===$&&A.a()
 s=this.b
 r=s?12:18
-q=s?4:8
+q=s?5:8
 p=A.bp(10)
 n=A.b([new A.bH(1+2*n,B.a9,B.e.aq(0.35+0.35*n),B.ia,16+16*n)],t.V)
-return A.Of(-0.02,A.ae(o,A.S("FLUTTER DEVELOPER",o,o,o,A.d1(B.p,s?22:36,0.5),o,o),B.l,o,o,new A.am(B.e,o,o,p,n,o,B.x),o,o,o,o,new A.a6(r,q,r,q),o,o,o))},
+return A.Of(-0.02,A.ae(o,A.S("SENIOR FLUTTER DEVELOPER",o,o,o,A.d1(B.p,s?18:30,0.5),o,o),B.l,o,o,new A.am(B.e,o,o,p,n,o,B.x),o,o,o,o,new A.a6(r,q,r,q),o,o,o))},
 $S:29}
 A.akt.prototype={
 $0(){var s=this.a.a.d
