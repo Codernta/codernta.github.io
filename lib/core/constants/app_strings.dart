@@ -17,8 +17,6 @@ class AppStrings {
       'Senior Flutter Developer with 4+ years of experience building scalable Android and iOS applications using Flutter. Experienced in Clean Architecture, BLoC, GetX, Provider, OpenAI integrations, BLE, CI/CD, Firebase, Socket.IO, payment gateways, Google Maps, and performance optimization.';
   static const String availabilityStatus = 'IMMEDIATE';
   static const String noticePeriod = '0 Days (Instant)';
-  static const String targetCTC = '₹8.0 LPA';
-  static const String currentCTC = '₹6.5 LPA';
   static const String workPreference = 'Remote / Hybrid / Onsite';
 
   // Stats

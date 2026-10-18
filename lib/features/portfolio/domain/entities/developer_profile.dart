@@ -6,8 +6,6 @@ class DeveloperProfile {
   final String bio;
   final String availabilityStatus;
   final String noticePeriod;
-  final String targetCTC;
-  final String currentCTC;
   final String workPreference;
   final String company;
   final String roleAtCompany;
@@ -23,8 +21,6 @@ class DeveloperProfile {
     required this.bio,
     required this.availabilityStatus,
     required this.noticePeriod,
-    required this.targetCTC,
-    required this.currentCTC,
     required this.workPreference,
     required this.company,
     required this.roleAtCompany,

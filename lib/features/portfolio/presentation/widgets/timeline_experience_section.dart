@@ -395,7 +395,7 @@ class _ExperienceTimelineCard extends StatelessWidget {
                       }).toList(),
                     ),
 
-                    // Availability & CTC pills for current position
+                    // Availability pills for current position
                     if (profile != null) ...[
                       const SizedBox(height: 16),
                       Wrap(
@@ -409,10 +409,6 @@ class _ExperienceTimelineCard extends StatelessWidget {
                             borderColor:
                                 AppColors.neonGreen.withValues(alpha: 0.3),
                             textColor: AppColors.neonGreen,
-                          ),
-                          BadgeChip(
-                            label: 'Expected: ${profile!.targetCTC}',
-                            backgroundColor: const Color(0xFF141418),
                           ),
                           BadgeChip(
                             label: profile!.workPreference,

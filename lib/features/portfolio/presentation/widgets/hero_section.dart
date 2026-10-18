@@ -273,7 +273,7 @@ class _HeroSectionState extends State<HeroSection>
               Text('|', style: AppTypography.mono(color: const Color(0xFF3F3F46))),
               _buildTelemetryItem('0 Notice Period (Immediate)'),
               Text('|', style: AppTypography.mono(color: const Color(0xFF3F3F46))),
-              _buildTelemetryItem('₹8.0 LPA Target'),
+              _buildTelemetryItem(widget.profile.workPreference),
             ],
           ),
         ),

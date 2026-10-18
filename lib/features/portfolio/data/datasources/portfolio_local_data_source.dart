@@ -26,8 +26,6 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
           'Senior Flutter Developer with 4+ years of experience building scalable Android and iOS applications using Flutter. Experienced in Clean Architecture, BLoC, GetX, Provider, OpenAI integrations, BLE, CI/CD, Firebase, Socket.IO, payment gateways, Google Maps, and performance optimization.',
       availabilityStatus: 'IMMEDIATE',
       noticePeriod: '0 Days (Instant)',
-      targetCTC: '₹8.0 LPA',
-      currentCTC: '₹6.5 LPA',
       workPreference: 'Remote / Hybrid / Onsite',
       company: 'IIC WebSolutions Pvt Ltd',
       roleAtCompany: 'Senior Flutter Developer',

@@ -179,7 +179,7 @@ class AboutSection extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
-          // Compensation & Notice Strip
+          // Availability & Notice Strip
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             decoration: BoxDecoration(
@@ -194,7 +194,7 @@ class AboutSection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'CURRENT CTC',
+                      'STATUS',
                       style: AppTypography.mono(
                         fontSize: 9,
                         color: const Color(0xFF71717A),
@@ -202,10 +202,12 @@ class AboutSection extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      profile.currentCTC.isNotEmpty ? profile.currentCTC : '₹6.5 LPA',
+                      profile.availabilityStatus.isNotEmpty
+                          ? profile.availabilityStatus
+                          : 'IMMEDIATE',
                       style: AppTypography.monoBold(
                         fontSize: 12,
-                        color: Colors.white,
+                        color: AppColors.neonGreen,
                       ),
                     ),
                   ],
@@ -219,7 +221,7 @@ class AboutSection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'TARGET CTC',
+                      'NOTICE PERIOD',
                       style: AppTypography.mono(
                         fontSize: 9,
                         color: const Color(0xFF71717A),
@@ -227,10 +229,12 @@ class AboutSection extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      profile.targetCTC.isNotEmpty ? profile.targetCTC : '₹8.0 LPA',
+                      profile.noticePeriod.isNotEmpty
+                          ? profile.noticePeriod
+                          : '0 Days (Instant)',
                       style: AppTypography.monoBold(
                         fontSize: 12,
-                        color: AppColors.neonGreen,
+                        color: Colors.white,
                       ),
                     ),
                   ],
