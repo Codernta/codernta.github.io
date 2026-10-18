@@ -17,7 +17,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 500));
 
     expect(find.text('FLUTTER DEVELOPER'), findsOneWidget);
-    expect(find.text('NITHIN TA'), findsWidgets);
+    expect(find.text('NITHIN T A'), findsWidgets);
     expect(find.text('Bharat FX 🇮🇳'), findsOneWidget);
     expect(find.text('Petbae'), findsOneWidget);
     expect(find.text('Demeter'), findsOneWidget);

@@ -35,9 +35,9 @@ class _PrimaryButtonState extends State<PrimaryButton> {
     Color getBgColor() {
       switch (widget.variant) {
         case ButtonVariant.primary:
-          return _isHovered ? AppColors.cyanAccent : AppColors.flutterCyan;
+          return _isHovered ? AppColors.neonGreenHover : AppColors.neonGreen;
         case ButtonVariant.outline:
-          return _isHovered ? AppColors.border : Colors.transparent;
+          return _isHovered ? AppColors.neonGreen.withValues(alpha: 0.12) : Colors.transparent;
         case ButtonVariant.subtle:
           return _isHovered ? AppColors.cardHover : AppColors.card;
         case ButtonVariant.textLink:
@@ -48,13 +48,13 @@ class _PrimaryButtonState extends State<PrimaryButton> {
     Color getTextColor() {
       switch (widget.variant) {
         case ButtonVariant.primary:
-          return const Color(0xFF070708);
+          return Colors.black;
         case ButtonVariant.outline:
-          return _isHovered ? AppColors.flutterCyan : AppColors.textPrimary;
+          return AppColors.neonGreen;
         case ButtonVariant.subtle:
-          return _isHovered ? AppColors.flutterCyan : AppColors.textPrimary;
+          return _isHovered ? AppColors.neonGreen : AppColors.textPrimary;
         case ButtonVariant.textLink:
-          return _isHovered ? Colors.white : AppColors.flutterCyan;
+          return _isHovered ? Colors.white : AppColors.neonGreen;
       }
     }
 
@@ -64,7 +64,7 @@ class _PrimaryButtonState extends State<PrimaryButton> {
           return null;
         case ButtonVariant.outline:
           return Border.all(
-            color: _isHovered ? AppColors.flutterCyan : AppColors.border,
+            color: _isHovered ? AppColors.neonGreen : AppColors.neonGreen.withValues(alpha: 0.8),
             width: 1.2,
           );
         case ButtonVariant.subtle:
@@ -90,13 +90,15 @@ class _PrimaryButtonState extends State<PrimaryButton> {
           padding: widget.padding,
           decoration: BoxDecoration(
             color: getBgColor(),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(100),
             border: getBorder(),
-            boxShadow: widget.variant == ButtonVariant.primary && _isHovered
+            boxShadow: widget.variant == ButtonVariant.primary
                 ? [
                     BoxShadow(
-                      color: AppColors.flutterCyan.withValues(alpha: 0.3),
-                      blurRadius: 16,
+                      color: _isHovered
+                          ? AppColors.neonGreen.withValues(alpha: 0.45)
+                          : AppColors.neonGreen.withValues(alpha: 0.25),
+                      blurRadius: _isHovered ? 25 : 15,
                       offset: const Offset(0, 2),
                     ),
                   ]

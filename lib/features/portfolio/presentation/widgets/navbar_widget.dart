@@ -1,10 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/utils/responsive_layout.dart';
-import '../../../../core/widgets/primary_button.dart';
 import '../controllers/portfolio_controller.dart';
 
 class NavbarWidget extends StatelessWidget {
@@ -15,27 +13,28 @@ class NavbarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDesktop = ResponsiveLayout.isDesktop(context);
+    final isMobile = ResponsiveLayout.isMobile(context);
 
     return ClipRRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: Container(
-          height: 68,
+          height: 64,
           decoration: BoxDecoration(
-            color: AppColors.backgroundSecondary.withValues(alpha: 0.85),
+            color: const Color(0xFF070708).withValues(alpha: 0.92),
             border: const Border(
-              bottom: BorderSide(color: AppColors.border, width: 1),
+              bottom: BorderSide(color: Color(0xFF18181B), width: 1),
             ),
           ),
           child: Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1200),
+              constraints: const BoxConstraints(maxWidth: 1280),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: isMobile ? 16 : 32),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Brand Logo & Title
+                    // Brand Logo with Pulsing Neon Dot
                     InkWell(
                       onTap: () => controller.scrollToSection(
                         controller.heroKey,
@@ -44,60 +43,53 @@ class NavbarWidget extends StatelessWidget {
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                            AppStrings.developerName.toUpperCase(),
-                            style: AppTypography.displayBold(
-                              fontSize: 18,
-                              letterSpacing: 0.5,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
                           Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 3,
-                            ),
+                            width: 8,
+                            height: 8,
                             decoration: BoxDecoration(
-                              color: AppColors.flutterCyan.withValues(alpha: 0.12),
-                              borderRadius: BorderRadius.circular(4),
-                              border: Border.all(
-                                color: AppColors.flutterCyan.withValues(alpha: 0.3),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  width: 6,
-                                  height: 6,
-                                  decoration: const BoxDecoration(
-                                    color: AppColors.flutterCyan,
-                                    shape: BoxShape.circle,
-                                  ),
-                                ),
-                                const SizedBox(width: 5),
-                                Text(
-                                  'FLUTTER DEV',
-                                  style: AppTypography.monoBold(
-                                    fontSize: 10,
-                                    color: AppColors.flutterCyan,
-                                    letterSpacing: 0.5,
-                                  ),
+                              color: AppColors.neonGreen,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.neonGreen.withValues(alpha: 0.6),
+                                  blurRadius: 8,
+                                  spreadRadius: 1,
                                 ),
                               ],
                             ),
                           ),
+                          const SizedBox(width: 10),
+                          Text(
+                            'NITHIN T A',
+                            style: AppTypography.displayBold(
+                              fontSize: 16,
+                              color: Colors.white,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                          if (!isMobile) ...[
+                            const SizedBox(width: 8),
+                            Text(
+                              '// SENIOR FLUTTER DEV',
+                              style: AppTypography.mono(
+                                fontSize: 10,
+                                color: AppColors.textMuted,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ],
                         ],
                       ),
                     ),
 
-                    // Center Nav Links (Desktop)
+                    // Nav Links (Desktop)
                     if (isDesktop)
                       Row(
                         children: [
                           _NavLink(
-                            label: AppStrings.navWork,
+                            label: 'Home',
                             isActive: controller.activeSection == 'hero',
                             onTap: () => controller.scrollToSection(
                               controller.heroKey,
@@ -105,23 +97,31 @@ class NavbarWidget extends StatelessWidget {
                             ),
                           ),
                           _NavLink(
-                            label: AppStrings.navOpenSource,
-                            isActive: controller.activeSection == 'opensource',
+                            label: 'About',
+                            isActive: controller.activeSection == 'about',
                             onTap: () => controller.scrollToSection(
-                              controller.openSourceKey,
-                              'opensource',
+                              controller.aboutKey,
+                              'about',
                             ),
                           ),
                           _NavLink(
-                            label: AppStrings.navTimeline,
-                            isActive: controller.activeSection == 'timeline',
+                            label: 'Skills',
+                            isActive: controller.activeSection == 'skills',
                             onTap: () => controller.scrollToSection(
-                              controller.timelineKey,
-                              'timeline',
+                              controller.skillsKey,
+                              'skills',
                             ),
                           ),
                           _NavLink(
-                            label: AppStrings.navApps,
+                            label: 'Services',
+                            isActive: controller.activeSection == 'services',
+                            onTap: () => controller.scrollToSection(
+                              controller.servicesKey,
+                              'services',
+                            ),
+                          ),
+                          _NavLink(
+                            label: 'Portfolio',
                             isActive: controller.activeSection == 'projects',
                             onTap: () => controller.scrollToSection(
                               controller.projectsKey,
@@ -129,7 +129,7 @@ class NavbarWidget extends StatelessWidget {
                             ),
                           ),
                           _NavLink(
-                            label: AppStrings.navContact,
+                            label: 'Contact',
                             isActive: controller.activeSection == 'contact',
                             onTap: () => controller.scrollToSection(
                               controller.contactKey,
@@ -139,12 +139,10 @@ class NavbarWidget extends StatelessWidget {
                         ],
                       ),
 
-                    // Right CTA
-                    PrimaryButton(
-                      label: isDesktop ? AppStrings.navHireMe : 'HIRE (0d)',
-                      variant: ButtonVariant.primary,
-                      showArrow: true,
-                      onPressed: () => controller.scrollToSection(
+                    // Right Neon Pill Action: Hire Me
+                    _HireMePill(
+                      isMobile: isMobile,
+                      onTap: () => controller.scrollToSection(
                         controller.contactKey,
                         'contact',
                       ),
@@ -181,8 +179,8 @@ class _NavLinkState extends State<_NavLink> {
   @override
   Widget build(BuildContext context) {
     final color = widget.isActive
-        ? AppColors.flutterCyan
-        : (_isHovered ? Colors.white : AppColors.textSecondary);
+        ? AppColors.neonGreen
+        : (_isHovered ? Colors.white : const Color(0xFFA1A1AA));
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -198,8 +196,76 @@ class _NavLinkState extends State<_NavLink> {
               fontSize: 12,
               fontWeight: FontWeight.w600,
               color: color,
-              letterSpacing: 0.5,
+              letterSpacing: 0.3,
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HireMePill extends StatefulWidget {
+  final bool isMobile;
+  final VoidCallback onTap;
+
+  const _HireMePill({required this.isMobile, required this.onTap});
+
+  @override
+  State<_HireMePill> createState() => _HireMePillState();
+}
+
+class _HireMePillState extends State<_HireMePill> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: EdgeInsets.symmetric(
+            horizontal: widget.isMobile ? 14 : 20,
+            vertical: widget.isMobile ? 7 : 9,
+          ),
+          decoration: BoxDecoration(
+            color: _isHovered ? AppColors.neonGreenHover : AppColors.neonGreen,
+            borderRadius: BorderRadius.circular(100),
+            boxShadow: [
+              BoxShadow(
+                color: _isHovered
+                    ? AppColors.neonGreen.withValues(alpha: 0.5)
+                    : AppColors.neonGreen.withValues(alpha: 0.3),
+                blurRadius: _isHovered ? 20 : 12,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                widget.isMobile ? 'HIRE ME' : 'HIRE ME (0 NOTICE)',
+                style: AppTypography.monoBold(
+                  fontSize: 11,
+                  color: Colors.black,
+                  letterSpacing: 0.5,
+                ),
+              ),
+              const SizedBox(width: 4),
+              const Text(
+                '↗',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ],
           ),
         ),
       ),

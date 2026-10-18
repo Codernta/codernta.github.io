@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/utils/responsive_layout.dart';
-import '../../../../core/widgets/architectural_grid_painter.dart';
+import '../../../../core/widgets/primary_button.dart';
 import '../../domain/entities/developer_profile.dart';
 import '../controllers/portfolio_controller.dart';
 
-class HeroSection extends StatelessWidget {
+class HeroSection extends StatefulWidget {
   final DeveloperProfile profile;
   final PortfolioController controller;
 
@@ -18,600 +18,488 @@ class HeroSection extends StatelessWidget {
   });
 
   @override
+  State<HeroSection> createState() => _HeroSectionState();
+}
+
+class _HeroSectionState extends State<HeroSection>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _orbitController;
+
+  @override
+  void initState() {
+    super.initState();
+    _orbitController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 25),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _orbitController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final isDesktop = ResponsiveLayout.isDesktop(context);
     final isMobile = ResponsiveLayout.isMobile(context);
 
     return Container(
-      key: controller.heroKey,
+      key: widget.controller.heroKey,
       padding: EdgeInsets.symmetric(
-        vertical: isMobile ? 20 : 40,
+        vertical: isMobile ? 32 : 56,
+        horizontal: isMobile ? 8 : 24,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // 1. Top Outer Editorial Metadata Bar (from inspiration design)
-          _OuterMetadataHeader(isDesktop: isDesktop),
-          const SizedBox(height: 12),
-
-          // 2. Main Dark Card Container
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.canvasDark,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.borderBright, width: 1.2),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.6),
-                  blurRadius: 36,
-                  offset: const Offset(0, 14),
-                ),
-              ],
-            ),
-            padding: EdgeInsets.all(isMobile ? 18 : 36),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: isDesktop
+          ? Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Top In-Canvas Header / Brand & Nav Links
-                _InCanvasHeader(
-                  controller: controller,
-                  isDesktop: isDesktop,
+                Expanded(
+                  flex: 7,
+                  child: _buildLeftHero(context, isMobile: false),
                 ),
-                SizedBox(height: isMobile ? 24 : 36),
-
-                // Massive Headline: "FLUTTER DEVELOPER"
-                FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'FLUTTER DEVELOPER',
-                    style: AppTypography.headlineCondensed(
-                      fontSize: isMobile ? 64 : 124,
-                      color: Colors.white,
-                      letterSpacing: isMobile ? 1.5 : 3.0,
-                    ),
-                  ),
-                ),
-                SizedBox(height: isMobile ? 18 : 28),
-
-                // 3-Column Paragraphs & CTA Band
-                if (isDesktop)
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Column 1: Current Company / Role
-                      Expanded(
-                        flex: 4,
-                        child: Text(
-                          'Senior Flutter Developer currently orchestrating AI-powered and BLE cross-platform mobile apps at IIC WebSolutions, based in Trivandrum, Kerala.',
-                          style: AppTypography.sans(
-                            fontSize: 14.5,
-                            color: AppColors.textSecondary,
-                            height: 1.55,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 32),
-
-                      // Column 2: Architecture & Performance Mission
-                      Expanded(
-                        flex: 5,
-                        child: Text(
-                          'Passionate mobile architect with 4+ years shipping scalable apps using Clean Architecture, BLoC, OpenAI integrations, Socket.IO, and zero-compromise 60fps performance.',
-                          style: AppTypography.sans(
-                            fontSize: 14.5,
-                            color: AppColors.textSecondary,
-                            height: 1.55,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 32),
-
-                      // Column 3: "GET IN TOUCH →" CTA
-                      Expanded(
-                        flex: 3,
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: _GetInTouchButton(controller: controller),
-                        ),
-                      ),
-                    ],
-                  )
-                else ...[
-                  Text(
-                    'Senior Flutter Developer currently orchestrating AI-powered and BLE cross-platform apps at IIC WebSolutions, based in Trivandrum, Kerala.',
-                    style: AppTypography.sans(
-                      fontSize: 14,
-                      color: AppColors.textSecondary,
-                      height: 1.5,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    '4+ years shipping scalable Android & iOS apps with Clean Architecture, BLoC, OpenAI APIs, Socket.IO, and store release lifecycle.',
-                    style: AppTypography.sans(
-                      fontSize: 14,
-                      color: AppColors.textSecondary,
-                      height: 1.5,
-                    ),
-                  ),
-                  const SizedBox(height: 18),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: _GetInTouchButton(controller: controller),
-                  ),
-                ],
-
-                SizedBox(height: isMobile ? 24 : 36),
-
-                // 3. Centerpiece Creative Canvas: Architectural Grid + Photo + Decal Badges
-                _HeroStageCanvas(
-                  isDesktop: isDesktop,
-                  isMobile: isMobile,
-                  controller: controller,
+                const SizedBox(width: 48),
+                Expanded(
+                  flex: 5,
+                  child: _buildRightOrbitalRadar(context, isMobile: false),
                 ),
               ],
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _buildRightOrbitalRadar(context, isMobile: true),
+                const SizedBox(height: 36),
+                _buildLeftHero(context, isMobile: true),
+              ],
             ),
-          ),
-
-          const SizedBox(height: 12),
-          // 4. Bottom Outer Editorial Metadata Bar (from inspiration design)
-          _OuterMetadataFooter(isMobile: isMobile),
-        ],
-      ),
     );
   }
-}
 
-/// Top editorial header outside the card container (matches inspiration image)
-class _OuterMetadataHeader extends StatelessWidget {
-  final bool isDesktop;
-
-  const _OuterMetadataHeader({required this.isDesktop});
-
-  @override
-  Widget build(BuildContext context) {
-    if (!isDesktop) {
-      return Wrap(
-        alignment: WrapAlignment.spaceBetween,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: 8,
-        runSpacing: 4,
-        children: [
-          Text(
-            'NITHIN TA',
-            style: AppTypography.monoBold(
-              fontSize: 11,
-              color: AppColors.outerFrameText,
-              letterSpacing: 0.8,
-            ),
-          ),
-          Text(
-            'FLUTTER ARCHITECT',
-            style: AppTypography.mono(
-              fontSize: 10,
-              color: AppColors.outerFrameText.withValues(alpha: 0.7),
-            ),
-          ),
-        ],
-      );
-    }
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _buildLeftHero(BuildContext context, {required bool isMobile}) {
+    return Column(
+      crossAxisAlignment:
+          isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Portfolio Design',
-              style: AppTypography.sansBold(
-                fontSize: 12,
-                color: AppColors.outerFrameText,
-              ),
-            ),
-            Text(
-              'Exploration',
-              style: AppTypography.sans(
-                fontSize: 12,
-                color: AppColors.outerFrameText.withValues(alpha: 0.8),
-              ),
-            ),
-          ],
-        ),
-        Text(
-          'Nithin TA',
-          style: AppTypography.sansBold(
-            fontSize: 13,
-            color: AppColors.outerFrameText,
-            letterSpacing: 0.5,
-          ),
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              'SENIOR FLUTTER DEV',
-              style: AppTypography.monoBold(
-                fontSize: 11,
-                color: AppColors.outerFrameText,
-              ),
-            ),
-            Text(
-              '— 2026',
-              style: AppTypography.mono(
-                fontSize: 11,
-                color: AppColors.outerFrameText.withValues(alpha: 0.8),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-/// Bottom editorial footer outside the card container (matches inspiration image)
-class _OuterMetadataFooter extends StatelessWidget {
-  final bool isMobile;
-
-  const _OuterMetadataFooter({required this.isMobile});
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      alignment: WrapAlignment.spaceBetween,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      spacing: 12,
-      runSpacing: 6,
-      children: [
-        Text(
-          isMobile
-              ? 'Senior Mobile Engineer'
-              : 'Senior Flutter Developer & Open-Source Supporter',
-          style: AppTypography.sans(
-            fontSize: 12,
-            color: AppColors.outerFrameText.withValues(alpha: 0.85),
-          ),
-        ),
-        Text(
-          '©\'22 — Present',
-          style: AppTypography.mono(
-            fontSize: 11,
-            color: AppColors.outerFrameText.withValues(alpha: 0.85),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-/// In-canvas header with pill logo on left and direct navigation links on right
-class _InCanvasHeader extends StatelessWidget {
-  final PortfolioController controller;
-  final bool isDesktop;
-
-  const _InCanvasHeader({
-    required this.controller,
-    required this.isDesktop,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        // Left: Monogram Pill Capsule Logo
-        InkWell(
-          onTap: () => controller.scrollToSection(controller.heroKey, 'hero'),
-          child: Row(
-            children: [
-              Container(
-                width: 38,
-                height: 22,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(
-                  child: Container(
-                    width: 7,
-                    height: 7,
-                    decoration: const BoxDecoration(
-                      color: AppColors.canvasDark,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Nithin TA',
-                    style: AppTypography.sansBold(
-                      fontSize: 14,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Text(
-                    'Senior Flutter Dev',
-                    style: AppTypography.mono(
-                      fontSize: 10,
-                      color: AppColors.textMuted,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-
-        // Right: Nav Links (Desktop)
-        if (isDesktop)
-          Row(
-            children: [
-              _HeroNavLink(
-                label: 'Work',
-                onTap: () => controller.scrollToSection(
-                    controller.projectsKey, 'projects'),
-              ),
-              const SizedBox(width: 24),
-              _HeroNavLink(
-                label: 'Experience',
-                onTap: () => controller.scrollToSection(
-                    controller.timelineKey, 'timeline'),
-              ),
-              const SizedBox(width: 24),
-              _HeroNavLink(
-                label: 'Open Source',
-                onTap: () => controller.scrollToSection(
-                    controller.openSourceKey, 'opensource'),
-              ),
-              const SizedBox(width: 24),
-              _HeroNavLink(
-                label: 'Contact',
-                onTap: () => controller.scrollToSection(
-                    controller.contactKey, 'contact'),
-              ),
-            ],
-          ),
-      ],
-    );
-  }
-}
-
-class _HeroNavLink extends StatefulWidget {
-  final String label;
-  final VoidCallback onTap;
-
-  const _HeroNavLink({required this.label, required this.onTap});
-
-  @override
-  State<_HeroNavLink> createState() => _HeroNavLinkState();
-}
-
-class _HeroNavLinkState extends State<_HeroNavLink> {
-  bool _hovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: Text(
-          widget.label,
-          style: AppTypography.sansMedium(
-            fontSize: 14,
-            color: _hovered ? Colors.white : AppColors.textSecondary,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// "GET IN TOUCH →" high-contrast button
-class _GetInTouchButton extends StatefulWidget {
-  final PortfolioController controller;
-
-  const _GetInTouchButton({required this.controller});
-
-  @override
-  State<_GetInTouchButton> createState() => _GetInTouchButtonState();
-}
-
-class _GetInTouchButtonState extends State<_GetInTouchButton> {
-  bool _hovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: GestureDetector(
-        onTap: () => widget.controller
-            .scrollToSection(widget.controller.contactKey, 'contact'),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+        // Tagline Pill
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
           decoration: BoxDecoration(
-            color: _hovered ? Colors.white : const Color(0xFF191920),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: _hovered ? Colors.white : AppColors.borderBright,
-            ),
+            color: const Color(0xFF111114),
+            borderRadius: BorderRadius.circular(100),
+            border: Border.all(color: const Color(0xFF27272A)),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                'GET IN TOUCH',
-                style: AppTypography.monoBold(
-                  fontSize: 12,
-                  color: _hovered ? Colors.black : Colors.white,
-                  letterSpacing: 1.0,
+              Container(
+                width: 7,
+                height: 7,
+                decoration: BoxDecoration(
+                  color: AppColors.neonGreen,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.neonGreen.withValues(alpha: 0.6),
+                      blurRadius: 6,
+                      spreadRadius: 1,
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(width: 8),
-              Icon(
-                Icons.arrow_forward,
-                size: 15,
-                color: _hovered ? Colors.black : Colors.white,
+              Text(
+                '4+ YEARS SENIOR FLUTTER SPECIALIST',
+                style: AppTypography.monoBold(
+                  fontSize: 11,
+                  color: AppColors.neonGreen,
+                  letterSpacing: 0.5,
+                ),
               ),
             ],
           ),
         ),
-      ),
+        const SizedBox(height: 20),
+
+        // Main Headline with Stitch Inline Neon Badge
+        Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          alignment: isMobile ? WrapAlignment.center : WrapAlignment.start,
+          spacing: 12,
+          runSpacing: 8,
+          children: [
+            Text(
+              'Hi, Nithin T A—',
+              style: AppTypography.displayExtraBold(
+                fontSize: isMobile ? 36 : 60,
+                color: Colors.white,
+                letterSpacing: -1.0,
+                height: 1.1,
+              ),
+            ),
+            Transform.rotate(
+              angle: -0.02,
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: isMobile ? 12 : 18,
+                  vertical: isMobile ? 4 : 8,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.neonGreen,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.neonGreen.withValues(alpha: 0.4),
+                      blurRadius: 20,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Text(
+                  'FLUTTER DEVELOPER',
+                  style: AppTypography.displayBold(
+                    fontSize: isMobile ? 22 : 36,
+                    color: Colors.black,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 24),
+
+        // Subtitle / Bio
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 620),
+          child: Text(
+            'Specialized in Clean Architecture, BLoC, high-throughput Socket.IO real-time systems, and 120 FPS custom canvas rendering. Shipped 5+ enterprise and consumer mobile applications with seamless hardware and cloud integration.',
+            textAlign: isMobile ? TextAlign.center : TextAlign.start,
+            style: AppTypography.mono(
+              fontSize: isMobile ? 13 : 15,
+              color: const Color(0xFFA1A1AA),
+              height: 1.6,
+            ),
+          ),
+        ),
+        const SizedBox(height: 32),
+
+        // Action Buttons
+        Wrap(
+          spacing: 16,
+          runSpacing: 12,
+          alignment: isMobile ? WrapAlignment.center : WrapAlignment.start,
+          children: [
+            PrimaryButton(
+              label: 'VIEW WORK',
+              variant: ButtonVariant.primary,
+              showArrow: true,
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+              onPressed: () => widget.controller.scrollToSection(
+                widget.controller.projectsKey,
+                'projects',
+              ),
+            ),
+            PrimaryButton(
+              label: 'HIRE ME (0 NOTICE)',
+              variant: ButtonVariant.outline,
+              showArrow: true,
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+              onPressed: () => widget.controller.scrollToSection(
+                widget.controller.contactKey,
+                'contact',
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 36),
+
+        // Telemetry Metadata Strip
+        Container(
+          padding: const EdgeInsets.only(top: 20),
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(color: Color(0xFF18181B), width: 1),
+            ),
+          ),
+          child: Wrap(
+            spacing: 20,
+            runSpacing: 8,
+            alignment: isMobile ? WrapAlignment.center : WrapAlignment.start,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              _buildTelemetryItem('Ex-IIC Web Solutions'),
+              Text('|', style: AppTypography.mono(color: const Color(0xFF3F3F46))),
+              _buildTelemetryItem('0 Notice Period (Immediate)'),
+              Text('|', style: AppTypography.mono(color: const Color(0xFF3F3F46))),
+              _buildTelemetryItem('₹8.0 LPA Target'),
+            ],
+          ),
+        ),
+      ],
     );
   }
-}
 
-/// The centerpiece architectural drafting grid canvas with stadium arch & decals
-class _HeroStageCanvas extends StatelessWidget {
-  final bool isDesktop;
-  final bool isMobile;
-  final PortfolioController controller;
-
-  const _HeroStageCanvas({
-    required this.isDesktop,
-    required this.isMobile,
-    required this.controller,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final double stageHeight = isDesktop ? 480 : (isMobile ? 420 : 460);
-
-    return Container(
-      height: stageHeight,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: AppColors.gridPaper,
-        // The rounded stadium arch on the right (matching inspiration image)
-        borderRadius: BorderRadius.only(
-          topLeft: const Radius.circular(16),
-          bottomLeft: const Radius.circular(16),
-          topRight: Radius.circular(isMobile ? 32 : 220),
-          bottomRight: Radius.circular(isMobile ? 32 : 220),
+  Widget _buildTelemetryItem(String label) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 6,
+          height: 6,
+          decoration: const BoxDecoration(
+            color: AppColors.neonGreen,
+            shape: BoxShape.circle,
+          ),
         ),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.only(
-          topLeft: const Radius.circular(16),
-          bottomLeft: const Radius.circular(16),
-          topRight: Radius.circular(isMobile ? 32 : 220),
-          bottomRight: Radius.circular(isMobile ? 32 : 220),
+        const SizedBox(width: 8),
+        Text(
+          label,
+          style: AppTypography.mono(
+            fontSize: 12,
+            color: const Color(0xFFE4E4E7),
+            fontWeight: FontWeight.w500,
+          ),
         ),
+      ],
+    );
+  }
+
+  Widget _buildRightOrbitalRadar(BuildContext context, {required bool isMobile}) {
+    final size = isMobile ? 300.0 : 400.0;
+    final avatarSize = isMobile ? 180.0 : 220.0;
+
+    return Center(
+      child: SizedBox(
+        width: size,
+        height: size,
         child: Stack(
           alignment: Alignment.center,
           children: [
-            // Background Architectural Grid Lines
-            Positioned.fill(
-              child: CustomPaint(
-                painter: const ArchitecturalGridPainter(),
+            // Outer Concentric Ring
+            Container(
+              width: size,
+              height: size,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: const Color(0xFF27272A).withValues(alpha: 0.7),
+                  width: 1,
+                ),
               ),
             ),
 
-            // Center: Portrait of Nithin TA
+            // Middle Dashed / Radar Ring (Rotates continuously)
+            AnimatedBuilder(
+              animation: _orbitController,
+              builder: (context, child) {
+                return Transform.rotate(
+                  angle: _orbitController.value * 2 * math.pi,
+                  child: child,
+                );
+              },
+              child: CustomPaint(
+                size: Size(size * 0.82, size * 0.82),
+                painter: _DashedCirclePainter(
+                  color: const Color(0xFF3F3F46).withValues(alpha: 0.7),
+                ),
+              ),
+            ),
+
+            // Inner Neon Subtle Orbit Ring
+            Container(
+              width: size * 0.65,
+              height: size * 0.65,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: AppColors.neonGreen.withValues(alpha: 0.25),
+                  width: 1.2,
+                ),
+              ),
+            ),
+
+            // Center Glowing Avatar Container with Nithin's Photo
+            Container(
+              width: avatarSize,
+              height: avatarSize,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.neonGreen.withValues(alpha: 0.35),
+                    blurRadius: 40,
+                    spreadRadius: 2,
+                  ),
+                ],
+                gradient: const RadialGradient(
+                  colors: [
+                    Color(0xFF1A1A1F),
+                    Color(0xFF0D0D10),
+                  ],
+                ),
+                border: Border.all(
+                  color: AppColors.neonGreen,
+                  width: 2.5,
+                ),
+              ),
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/nithin_profile.png',
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset(
+                      'assets/images/nithin_cutout.png',
+                      fit: BoxFit.cover,
+                    );
+                  },
+                ),
+              ),
+            ),
+
+            // Satellite Orbit Nodes (Positions from Stitch Reference)
+            // Node 1: "FL" (Top Right)
+            Positioned(
+              top: isMobile ? 12 : 24,
+              right: isMobile ? 24 : 40,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.neonGreen,
+                  borderRadius: BorderRadius.circular(100),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.neonGreen.withValues(alpha: 0.6),
+                      blurRadius: 15,
+                    ),
+                  ],
+                ),
+                child: Text(
+                  'FL',
+                  style: AppTypography.monoBold(
+                    fontSize: 11,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+
+            // Node 2: "BLoC" (Bottom Right)
+            Positioned(
+              bottom: isMobile ? 24 : 36,
+              right: isMobile ? 16 : 28,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF111114),
+                  borderRadius: BorderRadius.circular(100),
+                  border: Border.all(color: const Color(0xFF3F3F46)),
+                ),
+                child: Text(
+                  'BLoC',
+                  style: AppTypography.monoBold(
+                    fontSize: 11,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+
+            // Node 3: "IO" (Socket.IO - Top Left)
+            Positioned(
+              top: isMobile ? 32 : 50,
+              left: isMobile ? 16 : 28,
+              child: Container(
+                width: 34,
+                height: 34,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF111114),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColors.neonGreen.withValues(alpha: 0.7),
+                    width: 1.5,
+                  ),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  'IO',
+                  style: AppTypography.monoBold(
+                    fontSize: 11,
+                    color: AppColors.neonGreen,
+                  ),
+                ),
+              ),
+            ),
+
+            // Node 4: "Dart" (Bottom Left)
+            Positioned(
+              bottom: isMobile ? 28 : 44,
+              left: isMobile ? 28 : 44,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF111114),
+                  borderRadius: BorderRadius.circular(100),
+                  border: Border.all(color: const Color(0xFF27272A)),
+                ),
+                child: Text(
+                  'Dart',
+                  style: AppTypography.mono(
+                    fontSize: 10,
+                    color: const Color(0xFFA1A1AA),
+                  ),
+                ),
+              ),
+            ),
+
+            // Floating Bottom Availability Pill
             Positioned(
               bottom: 0,
-              child: _PortraitImage(height: stageHeight * 0.92),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF050505),
+                  borderRadius: BorderRadius.circular(100),
+                  border: Border.all(color: AppColors.neonGreen, width: 1.2),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.8),
+                      blurRadius: 16,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: AppColors.neonGreen,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.neonGreen.withValues(alpha: 0.8),
+                            blurRadius: 8,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Available Now • 0 Days Notice',
+                      style: AppTypography.monoBold(
+                        fontSize: 11,
+                        color: Colors.white,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-
-            // Floating Decal Stickers (Desktop Layout)
-            if (isDesktop) ...[
-              // 1. Top-Left: Cyan Circle Badge (Clean Architecture & BLoC)
-              Positioned(
-                top: 40,
-                left: 60,
-                child: _CyanCircleBadge(
-                  onTap: () => controller.scrollToSection(
-                      controller.timelineKey, 'timeline'),
-                ),
-              ),
-
-              // 2. Mid-Left: Yellow Tilted Sticker (AI-Powered / OpenAI)
-              Positioned(
-                top: 170,
-                left: 20,
-                child: _YellowSticker(
-                  onTap: () => controller.scrollToSection(
-                      controller.timelineKey, 'timeline'),
-                ),
-              ),
-
-              // 3. Bottom-Left: Orange Slanted Tag (Socket.IO / Real-Time)
-              Positioned(
-                bottom: 40,
-                left: 70,
-                child: _OrangeTag(
-                  onTap: () => controller.scrollToSection(
-                      controller.projectsKey, 'projects'),
-                ),
-              ),
-
-              // 4. Top-Right: Pink Stamp Badge (BLE & Hardware Integration)
-              Positioned(
-                top: 70,
-                right: 170,
-                child: _PinkStamp(
-                  onTap: () => controller.scrollToSection(
-                      controller.timelineKey, 'timeline'),
-                ),
-              ),
-
-              // 5. Mid-Right: Mint Slanted Ticket (Bharat FX / Pub.dev Package)
-              Positioned(
-                top: 180,
-                right: 35,
-                child: _MintTicket(
-                  onTap: () => controller.scrollToSection(
-                      controller.openSourceKey, 'opensource'),
-                ),
-              ),
-
-              // 6. Bottom-Right: Neon Lime Circular Seal (4+ Years / Immediate)
-              Positioned(
-                bottom: 30,
-                right: 120,
-                child: _LimeSeal(
-                  onTap: () => controller.scrollToSection(
-                      controller.contactKey, 'contact'),
-                ),
-              ),
-            ] else ...[
-              // Tablet / Mobile simplified floating decals
-              Positioned(
-                top: 16,
-                left: 16,
-                child: _YellowSticker(
-                  onTap: () => controller.scrollToSection(
-                      controller.timelineKey, 'timeline'),
-                ),
-              ),
-              Positioned(
-                top: 16,
-                right: 16,
-                child: _MintTicket(
-                  onTap: () => controller.scrollToSection(
-                      controller.openSourceKey, 'opensource'),
-                ),
-              ),
-              Positioned(
-                bottom: 16,
-                right: 20,
-                child: _LimeSeal(
-                  onTap: () => controller.scrollToSection(
-                      controller.contactKey, 'contact'),
-                ),
-              ),
-            ],
           ],
         ),
       ),
@@ -619,524 +507,37 @@ class _HeroStageCanvas extends StatelessWidget {
   }
 }
 
-/// Profile image rendering with clean cutout and graceful asset fallback
-class _PortraitImage extends StatelessWidget {
-  final double height;
+class _DashedCirclePainter extends CustomPainter {
+  final Color color;
 
-  const _PortraitImage({required this.height});
+  const _DashedCirclePainter({required this.color});
 
   @override
-  Widget build(BuildContext context) {
-    return Image.asset(
-      'assets/images/nithin_cutout.png',
-      height: height,
-      fit: BoxFit.contain,
-      errorBuilder: (context, error, stackTrace) {
-        // Fallback to original photo in a stylish pill frame
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(24),
-          child: Image.asset(
-            'assets/images/nithin_profile.png',
-            height: height * 0.85,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) =>
-                const SizedBox.shrink(),
-          ),
-        );
-      },
-    );
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 1.2
+      ..style = PaintingStyle.stroke;
+
+    final radius = size.width / 2;
+    final center = Offset(size.width / 2, size.height / 2);
+    const dashCount = 36;
+    const sweep = (2 * math.pi) / dashCount;
+    const dashLength = sweep * 0.55;
+
+    for (int i = 0; i < dashCount; i++) {
+      final startAngle = i * sweep;
+      canvas.drawArc(
+        Rect.fromCircle(center: center, radius: radius),
+        startAngle,
+        dashLength,
+        false,
+        paint,
+      );
+    }
   }
-}
-
-// ============================================================================
-// NEO-BRUTALIST STICKER DECALS (Directly inspired by the attached image)
-// ============================================================================
-
-/// 1. Cyan Circular Badge: "CLEAN ARCHITECTURE / BLoC • GETX • PROVIDER"
-class _CyanCircleBadge extends StatefulWidget {
-  final VoidCallback onTap;
-
-  const _CyanCircleBadge({required this.onTap});
 
   @override
-  State<_CyanCircleBadge> createState() => _CyanCircleBadgeState();
-}
-
-class _CyanCircleBadgeState extends State<_CyanCircleBadge> {
-  bool _hovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: Transform.rotate(
-          angle: -6 * (math.pi / 180),
-          child: AnimatedScale(
-            duration: const Duration(milliseconds: 200),
-            scale: _hovered ? 1.08 : 1.0,
-            child: Container(
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                color: AppColors.stickerCyan,
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.black, width: 2.2),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.25),
-                    offset: const Offset(3, 4),
-                    blurRadius: 0,
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.layers_outlined,
-                        size: 20,
-                        color: Colors.black,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'CLEAN\nARCHITECTURE',
-                        textAlign: TextAlign.center,
-                        style: AppTypography.sansBold(
-                          fontSize: 10,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        'BLoC • GETX',
-                        textAlign: TextAlign.center,
-                        style: AppTypography.mono(
-                          fontSize: 8,
-                          color: Colors.black87,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// 2. Yellow Tilted Sticker: "AI-POWERED ✦ / OPENAI APPS & AUTOMATION"
-class _YellowSticker extends StatefulWidget {
-  final VoidCallback onTap;
-
-  const _YellowSticker({required this.onTap});
-
-  @override
-  State<_YellowSticker> createState() => _YellowStickerState();
-}
-
-class _YellowStickerState extends State<_YellowSticker> {
-  bool _hovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: Transform.rotate(
-          angle: 4 * (math.pi / 180),
-          child: AnimatedScale(
-            duration: const Duration(milliseconds: 200),
-            scale: _hovered ? 1.06 : 1.0,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.stickerYellow,
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(color: Colors.black, width: 2.2),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.25),
-                    offset: const Offset(3, 3),
-                    blurRadius: 0,
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'AI-POWERED',
-                        style: AppTypography.monoBold(
-                          fontSize: 11,
-                          color: Colors.black,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 4, vertical: 1),
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(3),
-                        ),
-                        child: const Text(
-                          'OPENAI ✦',
-                          style: TextStyle(
-                            fontSize: 9,
-                            color: Colors.yellow,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    'AUTOMATION & WORKFLOWS',
-                    style: AppTypography.sansBold(
-                      fontSize: 10,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// 3. Orange Slanted Tag: "REAL-TIME CHAT ➔ / SOCKET.IO & WEBSOCKETS"
-class _OrangeTag extends StatefulWidget {
-  final VoidCallback onTap;
-
-  const _OrangeTag({required this.onTap});
-
-  @override
-  State<_OrangeTag> createState() => _OrangeTagState();
-}
-
-class _OrangeTagState extends State<_OrangeTag> {
-  bool _hovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: Transform.rotate(
-          angle: -4 * (math.pi / 180),
-          child: AnimatedScale(
-            duration: const Duration(milliseconds: 200),
-            scale: _hovered ? 1.06 : 1.0,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              decoration: BoxDecoration(
-                color: AppColors.stickerOrange,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.black, width: 2.2),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.3),
-                    offset: const Offset(3, 4),
-                    blurRadius: 0,
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text(
-                        '⚡ ',
-                        style: TextStyle(fontSize: 11),
-                      ),
-                      Text(
-                        'REAL-TIME CHAT',
-                        style: AppTypography.monoBold(
-                          fontSize: 11,
-                          color: Colors.white,
-                          letterSpacing: 0.8,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 2),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'SOCKET.IO ➔ WEBSOCKETS',
-                        style: AppTypography.sansBold(
-                          fontSize: 10,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// 4. Hot Pink Stamp Badge: "BLE & HARDWARE / BLUETOOTH LOW ENERGY"
-class _PinkStamp extends StatefulWidget {
-  final VoidCallback onTap;
-
-  const _PinkStamp({required this.onTap});
-
-  @override
-  State<_PinkStamp> createState() => _PinkStampState();
-}
-
-class _PinkStampState extends State<_PinkStamp> {
-  bool _hovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: Transform.rotate(
-          angle: 5 * (math.pi / 180),
-          child: AnimatedScale(
-            duration: const Duration(milliseconds: 200),
-            scale: _hovered ? 1.06 : 1.0,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.stickerPink,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.white, width: 2.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.25),
-                    offset: const Offset(3, 3),
-                    blurRadius: 0,
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'BLE & HARDWARE',
-                    style: AppTypography.monoBold(
-                      fontSize: 11,
-                      color: Colors.white,
-                      letterSpacing: 0.8,
-                    ),
-                  ),
-                  Text(
-                    'BLUETOOTH LOW ENERGY ©',
-                    style: AppTypography.sansBold(
-                      fontSize: 9,
-                      color: Colors.white.withValues(alpha: 0.9),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// 5. Mint Slanted Ticket: "BHARAT FX 🇮🇳 / PUB.DEV PACKAGE AUTHOR"
-class _MintTicket extends StatefulWidget {
-  final VoidCallback onTap;
-
-  const _MintTicket({required this.onTap});
-
-  @override
-  State<_MintTicket> createState() => _MintTicketState();
-}
-
-class _MintTicketState extends State<_MintTicket> {
-  bool _hovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: Transform.rotate(
-          angle: -7 * (math.pi / 180),
-          child: AnimatedScale(
-            duration: const Duration(milliseconds: 200),
-            scale: _hovered ? 1.06 : 1.0,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.stickerMint,
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(color: Colors.black, width: 2.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.25),
-                    offset: const Offset(3, 3),
-                    blurRadius: 0,
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'BHARAT FX 🇮🇳',
-                        style: AppTypography.sansBold(
-                          fontSize: 12,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      const Icon(
-                        Icons.auto_awesome,
-                        size: 13,
-                        color: Colors.black,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    'PUB.DEV AUTHOR ©\'26',
-                    style: AppTypography.monoBold(
-                      fontSize: 9,
-                      color: Colors.black87,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// 6. Lime Green Seal: "4+ YEARS EXP ★ 5+ LIVE APPS ★ 0d NOTICE"
-class _LimeSeal extends StatefulWidget {
-  final VoidCallback onTap;
-
-  const _LimeSeal({required this.onTap});
-
-  @override
-  State<_LimeSeal> createState() => _LimeSealState();
-}
-
-class _LimeSealState extends State<_LimeSeal> {
-  bool _hovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: Transform.rotate(
-          angle: 9 * (math.pi / 180),
-          child: AnimatedScale(
-            duration: const Duration(milliseconds: 200),
-            scale: _hovered ? 1.08 : 1.0,
-            child: Container(
-              width: 105,
-              height: 105,
-              decoration: BoxDecoration(
-                color: AppColors.stickerLime,
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.black, width: 2.2),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.3),
-                    offset: const Offset(3, 4),
-                    blurRadius: 0,
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.verified,
-                        size: 18,
-                        color: Colors.black,
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        '4+ YEARS',
-                        textAlign: TextAlign.center,
-                        style: AppTypography.sansBold(
-                          fontSize: 10,
-                          color: Colors.black,
-                        ),
-                      ),
-                      Text(
-                        '5+ APPS • 0d NOTICE',
-                        textAlign: TextAlign.center,
-                        style: AppTypography.mono(
-                          fontSize: 7.5,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  bool shouldRepaint(covariant _DashedCirclePainter oldDelegate) =>
+      oldDelegate.color != color;
 }

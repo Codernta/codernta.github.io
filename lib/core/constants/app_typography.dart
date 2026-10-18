@@ -21,17 +21,19 @@ class AppTypography {
     );
   }
 
-  // Display Font: Syne
+  // Display Font: Space Grotesk (Stitch Cyber Display)
   static TextStyle displayBold({
     double fontSize = 32,
     Color color = AppColors.textPrimary,
     double letterSpacing = -0.5,
+    double? height,
   }) {
-    return GoogleFonts.syne(
+    return GoogleFonts.spaceGrotesk(
       fontSize: fontSize,
-      fontWeight: FontWeight.w800,
+      fontWeight: FontWeight.w700,
       color: color,
       letterSpacing: letterSpacing,
+      height: height,
     );
   }
 
@@ -39,16 +41,18 @@ class AppTypography {
     double fontSize = 48,
     Color color = AppColors.textPrimary,
     double letterSpacing = -1.0,
+    double? height,
   }) {
-    return GoogleFonts.syne(
+    return GoogleFonts.spaceGrotesk(
       fontSize: fontSize,
-      fontWeight: FontWeight.w900,
+      fontWeight: FontWeight.w800,
       color: color,
       letterSpacing: letterSpacing,
+      height: height,
     );
   }
 
-  // Sans Font: Space Grotesk
+  // Sans Font: Plus Jakarta Sans (Stitch Body / Editorial)
   static TextStyle sans({
     double fontSize = 16,
     FontWeight fontWeight = FontWeight.normal,
@@ -56,7 +60,7 @@ class AppTypography {
     double? height,
     double? letterSpacing,
   }) {
-    return GoogleFonts.spaceGrotesk(
+    return GoogleFonts.plusJakartaSans(
       fontSize: fontSize,
       fontWeight: fontWeight,
       color: color,
@@ -69,12 +73,14 @@ class AppTypography {
     double fontSize = 16,
     Color color = AppColors.textPrimary,
     double? letterSpacing,
+    double? height,
   }) {
-    return GoogleFonts.spaceGrotesk(
+    return GoogleFonts.plusJakartaSans(
       fontSize: fontSize,
       fontWeight: FontWeight.w500,
       color: color,
       letterSpacing: letterSpacing,
+      height: height,
     );
   }
 
@@ -82,12 +88,14 @@ class AppTypography {
     double fontSize = 20,
     Color color = AppColors.textPrimary,
     double? letterSpacing,
+    double? height,
   }) {
-    return GoogleFonts.spaceGrotesk(
+    return GoogleFonts.plusJakartaSans(
       fontSize: fontSize,
       fontWeight: FontWeight.w700,
       color: color,
       letterSpacing: letterSpacing,
+      height: height,
     );
   }
 

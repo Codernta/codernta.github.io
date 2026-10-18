@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
-import '../../../../core/utils/responsive_layout.dart';
 import '../../../../core/widgets/cyber_dots_painter.dart';
 import '../controllers/portfolio_controller.dart';
+import '../widgets/about_section.dart';
+import '../widgets/contact_section.dart';
 import '../widgets/footer_section.dart';
 import '../widgets/hero_section.dart';
 import '../widgets/navbar_widget.dart';
 import '../widgets/open_source_section.dart';
 import '../widgets/projects_section.dart';
+import '../widgets/services_section.dart';
+import '../widgets/skills_radar_section.dart';
+import '../widgets/testimonial_section.dart';
 import '../widgets/timeline_experience_section.dart';
-import '../widgets/why_hire_section.dart';
+import '../widgets/vibrant_metrics_banner.dart';
 
 class PortfolioPage extends StatefulWidget {
   final PortfolioController controller;
@@ -31,7 +35,7 @@ class _PortfolioPageState extends State<PortfolioPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.outerBackdrop,
+      backgroundColor: const Color(0xFF050505),
       body: AnimatedBuilder(
         animation: widget.controller,
         builder: (context, _) {
@@ -41,7 +45,7 @@ class _PortfolioPageState extends State<PortfolioPage> {
               status == PortfolioStatus.initial) {
             return const Center(
               child: CircularProgressIndicator(
-                color: AppColors.flutterCyan,
+                color: AppColors.neonGreen,
               ),
             );
           }
@@ -83,7 +87,11 @@ class _PortfolioPageState extends State<PortfolioPage> {
               // Subtle Cyber Dots Background
               Positioned.fill(
                 child: CustomPaint(
-                  painter: CyberDotsPainter(),
+                  painter: CyberDotsPainter(
+                    dotColor: const Color(0x1200FF66),
+                    spacing: 36.0,
+                    radius: 0.9,
+                  ),
                 ),
               ),
 
@@ -92,43 +100,112 @@ class _PortfolioPageState extends State<PortfolioPage> {
                 controller: widget.controller.scrollController,
                 child: Column(
                   children: [
-                    const SizedBox(height: 68), // Offset for floating navbar
+                    const SizedBox(height: 64), // Offset for floating navbar
+
+                    // 1. Hero Section
                     Center(
-                      child: Container(
-                        width: ResponsiveLayout.contentWidth(context),
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            HeroSection(
-                              profile: data.profile,
-                              controller: widget.controller,
-                            ),
-                            OpenSourceSection(
-                              packages: data.openSourcePackages,
-                              controller: widget.controller,
-                            ),
-                            TimelineExperienceSection(
-                              profile: data.profile,
-                              experiences: data.experiences,
-                              education: data.education,
-                              skills: data.skills,
-                              controller: widget.controller,
-                            ),
-                            ProjectsSection(
-                              projects: data.projects,
-                              controller: widget.controller,
-                            ),
-                            WhyHireSection(
-                              profile: data.profile,
-                              controller: widget.controller,
-                            ),
-                            FooterSection(
-                              profile: data.profile,
-                            ),
-                          ],
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 1280),
+                        child: HeroSection(
+                          profile: data.profile,
+                          controller: widget.controller,
                         ),
                       ),
+                    ),
+
+                    // 2. Vibrant Full-Width Metrics Banner
+                    const VibrantMetricsBanner(),
+
+                    // 3. About Section
+                    Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 1280),
+                        child: AboutSection(
+                          profile: data.profile,
+                          controller: widget.controller,
+                        ),
+                      ),
+                    ),
+
+                    // 4. Skills Radar Section
+                    Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 1280),
+                        child: SkillsRadarSection(
+                          skills: data.skills,
+                          controller: widget.controller,
+                        ),
+                      ),
+                    ),
+
+                    // 5. Services Section
+                    Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 1280),
+                        child: ServicesSection(
+                          controller: widget.controller,
+                        ),
+                      ),
+                    ),
+
+                    // 6. Open Source Bharat FX Section
+                    Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 1280),
+                        child: OpenSourceSection(
+                          packages: data.openSourcePackages,
+                          controller: widget.controller,
+                        ),
+                      ),
+                    ),
+
+                    // 7. Career Experience & Education Timeline
+                    Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 1280),
+                        child: TimelineExperienceSection(
+                          profile: data.profile,
+                          experiences: data.experiences,
+                          education: data.education,
+                          skills: data.skills,
+                          controller: widget.controller,
+                        ),
+                      ),
+                    ),
+
+                    // 8. Projects & Live Production Apps
+                    Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 1280),
+                        child: ProjectsSection(
+                          projects: data.projects,
+                          controller: widget.controller,
+                        ),
+                      ),
+                    ),
+
+                    // 9. Testimonial Section
+                    Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 1280),
+                        child: const TestimonialSection(),
+                      ),
+                    ),
+
+                    // 10. Contact Section
+                    Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 1280),
+                        child: ContactSection(
+                          profile: data.profile,
+                          controller: widget.controller,
+                        ),
+                      ),
+                    ),
+
+                    // 11. Vibrant Full-Width Footer
+                    FooterSection(
+                      profile: data.profile,
                     ),
                   ],
                 ),

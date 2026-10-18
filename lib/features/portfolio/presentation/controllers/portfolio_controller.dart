@@ -21,6 +21,9 @@ class PortfolioController extends ChangeNotifier {
 
   // GlobalKeys for smooth scrolling to sections
   final GlobalKey heroKey = GlobalKey();
+  final GlobalKey aboutKey = GlobalKey();
+  final GlobalKey skillsKey = GlobalKey();
+  final GlobalKey servicesKey = GlobalKey();
   final GlobalKey openSourceKey = GlobalKey();
   final GlobalKey timelineKey = GlobalKey();
   final GlobalKey projectsKey = GlobalKey();
