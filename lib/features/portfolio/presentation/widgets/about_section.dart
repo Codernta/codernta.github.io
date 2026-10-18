@@ -3,7 +3,10 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/utils/responsive_layout.dart';
 import '../../../../core/utils/url_launcher_helper.dart';
+import '../../../../core/widgets/cyber_interactive_card.dart';
 import '../../../../core/widgets/primary_button.dart';
+import '../../../../core/widgets/pulsing_radar_dot.dart';
+import '../../../../core/widgets/scroll_reveal.dart';
 import '../../domain/entities/developer_profile.dart';
 import '../controllers/portfolio_controller.dart';
 
@@ -34,41 +37,43 @@ class AboutSection extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 5,
-                  child: _buildPortraitCard(context, isMobile: false),
+                  child: ScrollReveal(
+                    child: _buildPortraitCard(context, isMobile: false),
+                  ),
                 ),
                 const SizedBox(width: 48),
                 Expanded(
                   flex: 7,
-                  child: _buildAboutContent(context, isMobile: false),
+                  child: ScrollReveal(
+                    delay: const Duration(milliseconds: 150),
+                    child: _buildAboutContent(context, isMobile: false),
+                  ),
                 ),
               ],
             )
           : Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildPortraitCard(context, isMobile: true),
+                ScrollReveal(
+                  child: _buildPortraitCard(context, isMobile: true),
+                ),
                 const SizedBox(height: 36),
-                _buildAboutContent(context, isMobile: true),
+                ScrollReveal(
+                  delay: const Duration(milliseconds: 150),
+                  child: _buildAboutContent(context, isMobile: true),
+                ),
               ],
             ),
     );
   }
 
   Widget _buildPortraitCard(BuildContext context, {required bool isMobile}) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFF111114),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFF27272A), width: 1.2),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.7),
-            blurRadius: 30,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
+    return CyberInteractiveCard(
       padding: const EdgeInsets.all(20),
+      borderRadius: 24,
+      enableTilt: true,
+      maxTilt: 0.04,
+      liftOffset: -6,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -88,14 +93,7 @@ class AboutSection extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
-                      width: 6,
-                      height: 6,
-                      decoration: const BoxDecoration(
-                        color: AppColors.neonGreen,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
+                    const PulsingRadarDot(size: 6),
                     const SizedBox(width: 6),
                     Text(
                       'AVAILABLE IMMEDIATELY',
@@ -326,7 +324,7 @@ class AboutSection extends StatelessWidget {
         ),
         const SizedBox(height: 28),
 
-        // 4-Box Metadata Grid
+        // 4-Box Metadata Grid with interactive cards
         GridView.count(
           crossAxisCount: isMobile ? 2 : 2,
           shrinkWrap: true,
@@ -373,13 +371,12 @@ class AboutSection extends StatelessWidget {
   }
 
   Widget _buildMetaBox(String label, String value) {
-    return Container(
+    return CyberInteractiveCard(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: const Color(0xFF111114),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFF27272A)),
-      ),
+      borderRadius: 12,
+      enableTilt: true,
+      maxTilt: 0.03,
+      liftOffset: -3,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,

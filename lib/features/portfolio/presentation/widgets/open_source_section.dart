@@ -7,6 +7,8 @@ import '../../../../core/utils/url_launcher_helper.dart';
 import '../../../../core/widgets/badge_chip.dart';
 import '../../../../core/widgets/hover_card.dart';
 import '../../../../core/widgets/primary_button.dart';
+import '../../../../core/widgets/pulsing_radar_dot.dart';
+import '../../../../core/widgets/scroll_reveal.dart';
 import '../../../../core/widgets/section_header.dart';
 import '../../domain/entities/open_source_package.dart';
 import '../controllers/portfolio_controller.dart';
@@ -34,41 +36,46 @@ class OpenSourceSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SectionHeader(
-            label: '01 / OPEN-SOURCE FINTECH CONTRIBUTION',
-            title: 'PUB.DEV PACKAGE AUTHOR: BHARAT FX 🇮🇳',
-            subtitle:
-                'Enterprise-grade, 100% dependency-free Flutter & Dart toolkit designed specifically for Indian localization, fintech, and banking applications.',
+          ScrollReveal(
+            child: const SectionHeader(
+              label: '01 / OPEN-SOURCE FINTECH CONTRIBUTION',
+              title: 'PUB.DEV PACKAGE AUTHOR: BHARAT FX 🇮🇳',
+              subtitle:
+                  'Enterprise-grade, 100% dependency-free Flutter & Dart toolkit designed specifically for Indian localization, fintech, and banking applications.',
+            ),
           ),
           const SizedBox(height: 28),
 
-          // Main Hero Showcase Card
-          HoverCard(
-            padding: EdgeInsets.all(isMobile ? 20 : 32),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (isDesktop)
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 6,
-                        child: _PackageDetails(pkg: pkg),
-                      ),
-                      const SizedBox(width: 32),
-                      const Expanded(
-                        flex: 6,
-                        child: _FintechInteractiveSandbox(),
-                      ),
-                    ],
-                  )
-                else ...[
-                  _PackageDetails(pkg: pkg),
-                  const SizedBox(height: 28),
-                  const _FintechInteractiveSandbox(),
+          // Main Hero Showcase Card with Staggered ScrollReveal
+          ScrollReveal(
+            delay: const Duration(milliseconds: 150),
+            child: HoverCard(
+              padding: EdgeInsets.all(isMobile ? 20 : 32),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (isDesktop)
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 6,
+                          child: _PackageDetails(pkg: pkg),
+                        ),
+                        const SizedBox(width: 32),
+                        const Expanded(
+                          flex: 6,
+                          child: _FintechInteractiveSandbox(),
+                        ),
+                      ],
+                    )
+                  else ...[
+                    _PackageDetails(pkg: pkg),
+                    const SizedBox(height: 28),
+                    const _FintechInteractiveSandbox(),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
 
@@ -460,28 +467,41 @@ class _FintechInteractiveSandboxState
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: Text(
-                    'bharat_fx_engine.dart // Live Interactive Preview',
-                    style: AppTypography.mono(
-                      fontSize: 11,
-                      color: AppColors.textMuted,
-                    ),
-                    overflow: TextOverflow.ellipsis,
+                  child: Row(
+                    children: [
+                      Text(
+                        'bharat_fx_engine.dart // Live Interactive Preview',
+                        style: AppTypography.mono(
+                          fontSize: 11,
+                          color: AppColors.textMuted,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
-                    color: AppColors.emeraldLive.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                  child: Text(
-                    'PURE DART',
-                    style: AppTypography.monoBold(
-                      fontSize: 9,
-                      color: AppColors.emeraldLive,
+                    color: AppColors.neonGreen.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(
+                      color: AppColors.neonGreen.withValues(alpha: 0.35),
                     ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const PulsingRadarDot(size: 5),
+                      const SizedBox(width: 5),
+                      Text(
+                        'PURE DART',
+                        style: AppTypography.monoBold(
+                          fontSize: 9,
+                          color: AppColors.neonGreen,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],

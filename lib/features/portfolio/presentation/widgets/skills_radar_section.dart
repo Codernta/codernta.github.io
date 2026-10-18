@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/utils/responsive_layout.dart';
+import '../../../../core/widgets/cyber_interactive_card.dart';
+import '../../../../core/widgets/scroll_reveal.dart';
 import '../../domain/entities/skill_category.dart';
 import '../controllers/portfolio_controller.dart';
 
-class SkillsRadarSection extends StatelessWidget {
+class SkillsRadarSection extends StatefulWidget {
   final List<SkillCategory> skills;
   final PortfolioController controller;
 
@@ -17,12 +19,49 @@ class SkillsRadarSection extends StatelessWidget {
   });
 
   @override
+  State<SkillsRadarSection> createState() => _SkillsRadarSectionState();
+}
+
+class _SkillsRadarSectionState extends State<SkillsRadarSection>
+    with TickerProviderStateMixin {
+  late final AnimationController _sweepController;
+  late final AnimationController _pulseController;
+  late final AnimationController _gaugeFillController;
+
+  @override
+  void initState() {
+    super.initState();
+    _sweepController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 5),
+    )..repeat();
+
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2000),
+    )..repeat(reverse: true);
+
+    _gaugeFillController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1600),
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    _sweepController.dispose();
+    _pulseController.dispose();
+    _gaugeFillController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final isDesktop = ResponsiveLayout.isDesktop(context);
     final isMobile = ResponsiveLayout.isMobile(context);
 
     return Container(
-      key: controller.skillsKey,
+      key: widget.controller.skillsKey,
       padding: EdgeInsets.symmetric(
         vertical: isMobile ? 36 : 64,
         horizontal: isMobile ? 12 : 24,
@@ -31,39 +70,41 @@ class SkillsRadarSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Section Header
-          Center(
-            child: Column(
-              children: [
-                Text(
-                  '// PROFICIENCY & CORE STACK',
-                  style: AppTypography.monoBold(
-                    fontSize: 11,
-                    color: AppColors.neonGreen,
-                    letterSpacing: 1.2,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Technical Radar',
-                  style: AppTypography.displayBold(
-                    fontSize: isMobile ? 28 : 40,
-                    color: Colors.white,
-                    letterSpacing: -0.5,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 540),
-                  child: Text(
-                    'Comprehensive breakdown of modular architecture, protocols, and tooling.',
-                    textAlign: TextAlign.center,
-                    style: AppTypography.mono(
-                      fontSize: 13,
-                      color: const Color(0xFFA1A1AA),
+          ScrollReveal(
+            child: Center(
+              child: Column(
+                children: [
+                  Text(
+                    '// PROFICIENCY & CORE STACK',
+                    style: AppTypography.monoBold(
+                      fontSize: 11,
+                      color: AppColors.neonGreen,
+                      letterSpacing: 1.2,
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  Text(
+                    'Technical Radar',
+                    style: AppTypography.displayBold(
+                      fontSize: isMobile ? 28 : 40,
+                      color: Colors.white,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 540),
+                    child: Text(
+                      'Comprehensive breakdown of modular architecture, protocols, and tooling.',
+                      textAlign: TextAlign.center,
+                      style: AppTypography.mono(
+                        fontSize: 13,
+                        color: const Color(0xFFA1A1AA),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 48),
@@ -75,21 +116,32 @@ class SkillsRadarSection extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 5,
-                  child: _buildRadarDiagram(context, isMobile: false),
+                  child: ScrollReveal(
+                    delay: const Duration(milliseconds: 150),
+                    child: _buildRadarDiagram(context, isMobile: false),
+                  ),
                 ),
                 const SizedBox(width: 48),
                 Expanded(
                   flex: 7,
-                  child: _buildCapabilityCards(context),
+                  child: ScrollReveal(
+                    delay: const Duration(milliseconds: 300),
+                    child: _buildCapabilityCards(context),
+                  ),
                 ),
               ],
             )
           else
             Column(
               children: [
-                _buildRadarDiagram(context, isMobile: true),
+                ScrollReveal(
+                  child: _buildRadarDiagram(context, isMobile: true),
+                ),
                 const SizedBox(height: 40),
-                _buildCapabilityCards(context),
+                ScrollReveal(
+                  delay: const Duration(milliseconds: 200),
+                  child: _buildCapabilityCards(context),
+                ),
               ],
             ),
         ],
@@ -107,46 +159,61 @@ class SkillsRadarSection extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            // Arc / Gauge Painter
-            CustomPaint(
-              size: Size(size, size),
-              painter: _RadarGaugePainter(),
+            // Arc / Gauge Painter with Animated Fill & Continuous Radar Beam Sweep
+            AnimatedBuilder(
+              animation: Listenable.merge([_gaugeFillController, _sweepController]),
+              builder: (context, _) {
+                return CustomPaint(
+                  size: Size(size, size),
+                  painter: _AnimatedRadarGaugePainter(
+                    fillProgress: _gaugeFillController.value,
+                    sweepAngle: _sweepController.value * 2 * math.pi,
+                  ),
+                );
+              },
             ),
 
-            // Center Green Skill Circle (Direct reference element)
-            Container(
-              width: isMobile ? 96.0 : 112.0,
-              height: isMobile ? 96.0 : 112.0,
-              decoration: BoxDecoration(
-                color: AppColors.neonGreen,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.neonGreen.withValues(alpha: 0.5),
-                    blurRadius: 35,
-                    spreadRadius: 2,
+            // Center Green Skill Circle with breathing glow
+            AnimatedBuilder(
+              animation: _pulseController,
+              builder: (context, _) {
+                final glow = _pulseController.value;
+                return Container(
+                  width: isMobile ? 96.0 : 112.0,
+                  height: isMobile ? 96.0 : 112.0,
+                  decoration: BoxDecoration(
+                    color: AppColors.neonGreen,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.neonGreen
+                            .withValues(alpha: 0.35 + (0.35 * glow)),
+                        blurRadius: 28 + (16 * glow),
+                        spreadRadius: 1 + (2 * glow),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Skill',
-                    style: AppTypography.displayBold(
-                      fontSize: 20,
-                      color: Colors.black,
-                    ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Skill',
+                        style: AppTypography.displayBold(
+                          fontSize: 20,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Text(
+                        '95% CORE',
+                        style: AppTypography.monoBold(
+                          fontSize: 10,
+                          color: const Color(0xCC000000),
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    '95% CORE',
-                    style: AppTypography.monoBold(
-                      fontSize: 10,
-                      color: const Color(0xCC000000),
-                    ),
-                  ),
-                ],
-              ),
+                );
+              },
             ),
 
             // Node A (Architecture)
@@ -251,11 +318,18 @@ class SkillsRadarSection extends StatelessWidget {
               right: 0,
               top: isMobile ? 32 : 44,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: Colors.black,
                   borderRadius: BorderRadius.circular(100),
                   border: Border.all(color: AppColors.neonGreen),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.neonGreen.withValues(alpha: 0.3),
+                      blurRadius: 10,
+                    ),
+                  ],
                 ),
                 child: Text(
                   '95% Flutter',
@@ -309,7 +383,7 @@ class SkillsRadarSection extends StatelessWidget {
         ),
         const SizedBox(height: 20),
 
-        // Core Tech Pills
+        // Core Tech Pills with hover scaling
         Wrap(
           spacing: 8,
           runSpacing: 8,
@@ -340,13 +414,12 @@ class SkillsRadarSection extends StatelessWidget {
     required double fraction,
     required String description,
   }) {
-    return Container(
+    return CyberInteractiveCard(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFF111114),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFF27272A)),
-      ),
+      borderRadius: 14,
+      enableTilt: true,
+      maxTilt: 0.04,
+      liftOffset: -4,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -369,18 +442,44 @@ class SkillsRadarSection extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 6),
-          // Progress bar
+          const SizedBox(height: 8),
+          // Animated Progress Bar with glowing tip
           ClipRRect(
             borderRadius: BorderRadius.circular(100),
-            child: LinearProgressIndicator(
-              value: fraction,
-              backgroundColor: const Color(0xFF1F1F24),
-              valueColor: const AlwaysStoppedAnimation<Color>(AppColors.neonGreen),
-              minHeight: 4,
+            child: TweenAnimationBuilder<double>(
+              tween: Tween<double>(begin: 0.0, end: fraction),
+              duration: const Duration(milliseconds: 1400),
+              curve: Curves.easeOutCubic,
+              builder: (context, value, _) {
+                return Stack(
+                  children: [
+                    Container(
+                      height: 5,
+                      color: const Color(0xFF1F1F24),
+                    ),
+                    FractionallySizedBox(
+                      widthFactor: value,
+                      child: Container(
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: AppColors.neonGreen,
+                          boxShadow: [
+                            BoxShadow(
+                              color:
+                                  AppColors.neonGreen.withValues(alpha: 0.8),
+                              blurRadius: 8,
+                              spreadRadius: 1,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           Text(
             description,
             style: AppTypography.mono(
@@ -395,32 +494,62 @@ class SkillsRadarSection extends StatelessWidget {
   }
 }
 
-class _SkillBadge extends StatelessWidget {
+class _SkillBadge extends StatefulWidget {
   final String label;
 
   const _SkillBadge(this.label);
 
   @override
+  State<_SkillBadge> createState() => _SkillBadgeState();
+}
+
+class _SkillBadgeState extends State<_SkillBadge> {
+  bool _isHovered = false;
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: const Color(0xFF0D0D10),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFF27272A)),
-      ),
-      child: Text(
-        label,
-        style: AppTypography.mono(
-          fontSize: 11,
-          color: const Color(0xFFE4E4E7),
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          color: _isHovered ? const Color(0xFF1F1F26) : const Color(0xFF0D0D10),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: _isHovered ? AppColors.neonGreen : const Color(0xFF27272A),
+          ),
+          boxShadow: _isHovered
+              ? [
+                  BoxShadow(
+                    color: AppColors.neonGreen.withValues(alpha: 0.2),
+                    blurRadius: 10,
+                  ),
+                ]
+              : null,
+        ),
+        child: Text(
+          widget.label,
+          style: AppTypography.mono(
+            fontSize: 11,
+            color: _isHovered ? AppColors.neonGreen : const Color(0xFFE4E4E7),
+          ),
         ),
       ),
     );
   }
 }
 
-class _RadarGaugePainter extends CustomPainter {
+class _AnimatedRadarGaugePainter extends CustomPainter {
+  final double fillProgress;
+  final double sweepAngle;
+
+  _AnimatedRadarGaugePainter({
+    required this.fillProgress,
+    required this.sweepAngle,
+  });
+
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
@@ -444,23 +573,36 @@ class _RadarGaugePainter extends CustomPainter {
       );
     }
 
-    // Glowing Neon Green Arc (95% circular meter)
+    // Glowing Neon Green Arc (Animates up to 88% / 95% full circle)
+    final targetSweep = 2 * math.pi * 0.88 * fillProgress;
     final arcPaint = Paint()
       ..color = AppColors.neonGreen
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3.5
       ..strokeCap = StrokeCap.round;
 
-    // Arc from -pi/2 forward 0.95 * 2pi
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       -math.pi / 2,
-      2 * math.pi * 0.88,
+      targetSweep,
       false,
       arcPaint,
     );
+
+    // Rotating Radar Beam Line & Subtle Trail
+    final beamEndX = center.dx + radius * math.cos(sweepAngle);
+    final beamEndY = center.dy + radius * math.sin(sweepAngle);
+
+    final beamPaint = Paint()
+      ..color = AppColors.neonGreen.withValues(alpha: 0.45)
+      ..strokeWidth = 1.4
+      ..style = PaintingStyle.stroke;
+
+    canvas.drawLine(center, Offset(beamEndX, beamEndY), beamPaint);
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _AnimatedRadarGaugePainter oldDelegate) =>
+      oldDelegate.fillProgress != fillProgress ||
+      oldDelegate.sweepAngle != sweepAngle;
 }

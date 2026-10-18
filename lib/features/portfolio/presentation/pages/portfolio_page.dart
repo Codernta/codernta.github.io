@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
-import '../../../../core/widgets/cyber_dots_painter.dart';
+import '../../../../core/widgets/cyber_ambient_background.dart';
 import '../controllers/portfolio_controller.dart';
 import '../widgets/about_section.dart';
 import '../widgets/contact_section.dart';
@@ -84,21 +84,12 @@ class _PortfolioPageState extends State<PortfolioPage> {
 
           return Stack(
             children: [
-              // Subtle Cyber Dots Background
+              // Interactive Cyber Ambient Backdrop (Dots + Dust Particles + Spotlight)
               Positioned.fill(
-                child: CustomPaint(
-                  painter: CyberDotsPainter(
-                    dotColor: const Color(0x1200FF66),
-                    spacing: 36.0,
-                    radius: 0.9,
-                  ),
-                ),
-              ),
-
-              // Main Scrollable Portfolio Body
-              SingleChildScrollView(
-                controller: widget.controller.scrollController,
-                child: Column(
+                child: CyberAmbientBackground(
+                  child: SingleChildScrollView(
+                    controller: widget.controller.scrollController,
+                    child: Column(
                   children: [
                     const SizedBox(height: 64), // Offset for floating navbar
 
@@ -210,6 +201,8 @@ class _PortfolioPageState extends State<PortfolioPage> {
                   ],
                 ),
               ),
+            ),
+          ),
 
               // Floating Sticky Glassmorphism Navbar
               Positioned(

@@ -3,6 +3,9 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/utils/responsive_layout.dart';
 import '../../../../core/utils/url_launcher_helper.dart';
+import '../../../../core/widgets/cyber_interactive_card.dart';
+import '../../../../core/widgets/pulsing_radar_dot.dart';
+import '../../../../core/widgets/scroll_reveal.dart';
 import '../../domain/entities/project_item.dart';
 import '../controllers/portfolio_controller.dart';
 
@@ -72,99 +75,122 @@ class _ProjectsSectionState extends State<ProjectsSection> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Section Header
-          Center(
-            child: Column(
-              children: [
-                Text(
-                  '// LIVE PRODUCTION APPS',
-                  style: AppTypography.monoBold(
-                    fontSize: 11,
-                    color: AppColors.neonGreen,
-                    letterSpacing: 1.2,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Portfolio',
-                  style: AppTypography.displayBold(
-                    fontSize: isMobile ? 28 : 40,
-                    color: Colors.white,
-                    letterSpacing: -0.5,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 580),
-                  child: Text(
-                    'Verified production mobile applications shipped directly to the Google Play Store.',
-                    textAlign: TextAlign.center,
-                    style: AppTypography.mono(
-                      fontSize: 13,
-                      color: const Color(0xFFA1A1AA),
+          ScrollReveal(
+            child: Center(
+              child: Column(
+                children: [
+                  Text(
+                    '// LIVE PRODUCTION APPS',
+                    style: AppTypography.monoBold(
+                      fontSize: 11,
+                      color: AppColors.neonGreen,
+                      letterSpacing: 1.2,
                     ),
                   ),
-                ),
-                const SizedBox(height: 24),
-
-                // Category Filter Pills
-                Wrap(
-                  spacing: 12,
-                  runSpacing: 10,
-                  alignment: WrapAlignment.center,
-                  children: _categories.map((cat) {
-                    final isSelected = _selectedCategory == cat;
-                    return GestureDetector(
-                      onTap: () => setState(() => _selectedCategory = cat),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: isSelected
-                              ? AppColors.neonGreen.withValues(alpha: 0.15)
-                              : const Color(0xFF111114),
-                          borderRadius: BorderRadius.circular(100),
-                          border: Border.all(
-                            color: isSelected
-                                ? AppColors.neonGreen
-                                : const Color(0xFF27272A),
-                          ),
-                        ),
-                        child: Text(
-                          cat,
-                          style: AppTypography.monoBold(
-                            fontSize: 11,
-                            color: isSelected
-                                ? AppColors.neonGreen
-                                : const Color(0xFFA1A1AA),
-                          ),
-                        ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Portfolio',
+                    style: AppTypography.displayBold(
+                      fontSize: isMobile ? 28 : 40,
+                      color: Colors.white,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 580),
+                    child: Text(
+                      'Verified production mobile applications shipped directly to the Google Play Store.',
+                      textAlign: TextAlign.center,
+                      style: AppTypography.mono(
+                        fontSize: 13,
+                        color: const Color(0xFFA1A1AA),
                       ),
-                    );
-                  }).toList(),
-                ),
-              ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Category Filter Pills with animated transitions
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 10,
+                    alignment: WrapAlignment.center,
+                    children: _categories.map((cat) {
+                      final isSelected = _selectedCategory == cat;
+                      return GestureDetector(
+                        onTap: () => setState(() => _selectedCategory = cat),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? AppColors.neonGreen.withValues(alpha: 0.15)
+                                : const Color(0xFF111114),
+                            borderRadius: BorderRadius.circular(100),
+                            border: Border.all(
+                              color: isSelected
+                                  ? AppColors.neonGreen
+                                  : const Color(0xFF27272A),
+                            ),
+                            boxShadow: isSelected
+                                ? [
+                                    BoxShadow(
+                                      color: AppColors.neonGreen
+                                          .withValues(alpha: 0.3),
+                                      blurRadius: 10,
+                                    ),
+                                  ]
+                                : null,
+                          ),
+                          child: Text(
+                            cat,
+                            style: AppTypography.monoBold(
+                              fontSize: 11,
+                              color: isSelected
+                                  ? AppColors.neonGreen
+                                  : const Color(0xFFA1A1AA),
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 40),
 
-          // Projects Grid
+          // Projects Grid with Staggered Entrance
           LayoutBuilder(
             builder: (context, constraints) {
-              final crossAxisCount = isDesktop ? 3 : (constraints.maxWidth > 700 ? 2 : 1);
+              final crossAxisCount =
+                  isDesktop ? 3 : (constraints.maxWidth > 700 ? 2 : 1);
               final gap = 20.0;
-              final itemWidth = (constraints.maxWidth - ((crossAxisCount - 1) * gap)) / crossAxisCount;
+              final itemWidth =
+                  (constraints.maxWidth - ((crossAxisCount - 1) * gap)) /
+                      crossAxisCount;
 
-              final displayList = filteredProjects.isNotEmpty ? filteredProjects : widget.projects;
+              final displayList = filteredProjects.isNotEmpty
+                  ? filteredProjects
+                  : widget.projects;
 
               return Wrap(
                 spacing: gap,
                 runSpacing: gap,
-                children: displayList.map((item) {
+                children: displayList.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final item = entry.value;
+
                   return SizedBox(
                     width: itemWidth,
-                    child: _StitchProjectCard(item: item),
+                    child: ScrollReveal(
+                      delay: Duration(milliseconds: (index % 6) * 80),
+                      child: _StitchProjectCard(item: item),
+                    ),
                   );
                 }).toList(),
               );
@@ -195,28 +221,12 @@ class _StitchProjectCardState extends State<_StitchProjectCard> {
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        decoration: BoxDecoration(
-          color: const Color(0xFF111114),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: _isHovered
-                ? AppColors.neonGreen.withValues(alpha: 0.8)
-                : const Color(0xFF27272A),
-            width: 1.2,
-          ),
-          boxShadow: _isHovered
-              ? [
-                  BoxShadow(
-                    color: AppColors.neonGreen.withValues(alpha: 0.15),
-                    blurRadius: 24,
-                    offset: const Offset(0, 4),
-                  ),
-                ]
-              : null,
-        ),
-        clipBehavior: Clip.antiAlias,
+      child: CyberInteractiveCard(
+        padding: EdgeInsets.zero,
+        borderRadius: 20,
+        enableTilt: true,
+        maxTilt: 0.05,
+        liftOffset: -6,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -225,7 +235,7 @@ class _StitchProjectCardState extends State<_StitchProjectCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Top index & badge row
+                  // Top index & badge row with pulsing radar dot
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -244,14 +254,7 @@ class _StitchProjectCardState extends State<_StitchProjectCard> {
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Container(
-                            width: 6,
-                            height: 6,
-                            decoration: const BoxDecoration(
-                              color: AppColors.neonGreen,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
+                          const PulsingRadarDot(size: 6),
                           const SizedBox(width: 5),
                           Text(
                             'PLAY STORE',
@@ -365,12 +368,18 @@ class _StitchProjectCardState extends State<_StitchProjectCard> {
                           ),
                         ),
                         const SizedBox(width: 4),
-                        const Text(
-                          '↗',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.neonGreen,
+                        AnimatedSlide(
+                          offset: _isHovered
+                              ? const Offset(0.2, -0.2)
+                              : Offset.zero,
+                          duration: const Duration(milliseconds: 180),
+                          child: const Text(
+                            '↗',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.neonGreen,
+                            ),
                           ),
                         ),
                       ],

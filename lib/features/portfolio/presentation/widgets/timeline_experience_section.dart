@@ -4,6 +4,8 @@ import '../../../../core/constants/app_typography.dart';
 import '../../../../core/utils/responsive_layout.dart';
 import '../../../../core/widgets/badge_chip.dart';
 import '../../../../core/widgets/hover_card.dart';
+import '../../../../core/widgets/pulsing_radar_dot.dart';
+import '../../../../core/widgets/scroll_reveal.dart';
 import '../../../../core/widgets/section_header.dart';
 import '../../domain/entities/developer_profile.dart';
 import '../../domain/entities/education_item.dart';
@@ -38,11 +40,13 @@ class TimelineExperienceSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SectionHeader(
-            label: '02 / PROFESSIONAL TIMELINE',
-            title: 'ENGINEERING ROLES & CAPABILITIES',
-            subtitle:
-                '4+ years building high-performance, cross-platform Android and iOS solutions adhering to Clean Architecture, SOLID, and scalable state management.',
+          ScrollReveal(
+            child: const SectionHeader(
+              label: '02 / PROFESSIONAL TIMELINE',
+              title: 'ENGINEERING ROLES & CAPABILITIES',
+              subtitle:
+                  '4+ years building high-performance, cross-platform Android and iOS solutions adhering to Clean Architecture, SOLID, and scalable state management.',
+            ),
           ),
           const SizedBox(height: 32),
 
@@ -108,14 +112,14 @@ class _ExperienceList extends StatelessWidget {
             const Icon(
               Icons.work_outline,
               size: 16,
-              color: AppColors.flutterCyan,
+              color: AppColors.neonGreen,
             ),
             const SizedBox(width: 8),
             Text(
               'WORK EXPERIENCE',
               style: AppTypography.monoBold(
                 fontSize: 12,
-                color: AppColors.flutterCyan,
+                color: AppColors.neonGreen,
                 letterSpacing: 1.2,
               ),
             ),
@@ -127,10 +131,13 @@ class _ExperienceList extends StatelessWidget {
           final exp = entry.value;
           final isLast = index == experiences.length - 1;
 
-          return _ExperienceTimelineCard(
-            experience: exp,
-            isLast: isLast,
-            profile: exp.isCurrent ? profile : null,
+          return ScrollReveal(
+            delay: Duration(milliseconds: index * 90),
+            child: _ExperienceTimelineCard(
+              experience: exp,
+              isLast: isLast,
+              profile: exp.isCurrent ? profile : null,
+            ),
           );
         }),
       ],
@@ -155,40 +162,42 @@ class _ExperienceTimelineCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Timeline indicator with line
+          // Timeline indicator with glowing line
           Column(
             children: [
               Container(
                 margin: const EdgeInsets.only(top: 24),
-                width: 14,
-                height: 14,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: experience.isCurrent
-                      ? AppColors.emeraldLive
-                      : AppColors.flutterCyan.withOpacity(0.3),
-                  border: Border.all(
-                    color: experience.isCurrent
-                        ? AppColors.emeraldLive.withOpacity(0.6)
-                        : AppColors.flutterCyan,
-                    width: 2,
-                  ),
-                  boxShadow: experience.isCurrent
-                      ? [
-                          BoxShadow(
-                            color: AppColors.emeraldLive.withOpacity(0.5),
-                            blurRadius: 8,
-                            spreadRadius: 2,
+                child: experience.isCurrent
+                    ? const PulsingRadarDot(size: 10)
+                    : Container(
+                        width: 12,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: const Color(0xFF18181B),
+                          border: Border.all(
+                            color: const Color(0xFF3F3F46),
+                            width: 2,
                           ),
-                        ]
-                      : null,
-                ),
+                        ),
+                      ),
               ),
               if (!isLast)
                 Expanded(
                   child: Container(
                     width: 2,
-                    color: AppColors.border,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          experience.isCurrent
+                              ? AppColors.neonGreen.withValues(alpha: 0.8)
+                              : const Color(0xFF27272A),
+                          const Color(0xFF27272A),
+                        ],
+                      ),
+                    ),
                     margin: const EdgeInsets.symmetric(vertical: 4),
                   ),
                 ),
@@ -229,31 +238,22 @@ class _ExperienceTimelineCard extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 3),
                                 decoration: BoxDecoration(
-                                  color:
-                                      AppColors.emeraldLive.withOpacity(0.15),
+                                  color: AppColors.neonGreen.withValues(alpha: 0.15),
                                   borderRadius: BorderRadius.circular(4),
                                   border: Border.all(
-                                    color: AppColors.emeraldLive
-                                        .withOpacity(0.4),
+                                    color: AppColors.neonGreen.withValues(alpha: 0.4),
                                   ),
                                 ),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Container(
-                                      width: 6,
-                                      height: 6,
-                                      decoration: const BoxDecoration(
-                                        color: AppColors.emeraldLive,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
+                                    const PulsingRadarDot(size: 6),
                                     const SizedBox(width: 4),
                                     Text(
                                       'PRESENT',
                                       style: AppTypography.monoBold(
                                         fontSize: 10,
-                                        color: AppColors.emeraldLive,
+                                        color: AppColors.neonGreen,
                                       ),
                                     ),
                                   ],
@@ -284,12 +284,12 @@ class _ExperienceTimelineCard extends StatelessWidget {
                               horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
                             color: experience.isCurrent
-                                ? AppColors.flutterCyan.withOpacity(0.12)
+                                ? AppColors.neonGreen.withValues(alpha: 0.12)
                                 : const Color(0xFF14141A),
                             borderRadius: BorderRadius.circular(4),
                             border: Border.all(
                               color: experience.isCurrent
-                                  ? AppColors.flutterCyan.withOpacity(0.35)
+                                  ? AppColors.neonGreen.withValues(alpha: 0.35)
                                   : AppColors.border,
                             ),
                           ),
@@ -298,7 +298,7 @@ class _ExperienceTimelineCard extends StatelessWidget {
                             style: AppTypography.monoBold(
                               fontSize: 11,
                               color: experience.isCurrent
-                                  ? AppColors.flutterCyan
+                                  ? AppColors.neonGreen
                                   : AppColors.textSecondary,
                             ),
                           ),
@@ -317,7 +317,7 @@ class _ExperienceTimelineCard extends StatelessWidget {
                           experience.company,
                           style: AppTypography.sansBold(
                             fontSize: 15,
-                            color: AppColors.flutterCyan,
+                            color: AppColors.neonGreen,
                           ),
                         ),
                         Text(
@@ -361,7 +361,7 @@ class _ExperienceTimelineCard extends StatelessWidget {
                               height: 5,
                               decoration: BoxDecoration(
                                 color: experience.isCurrent
-                                    ? AppColors.flutterCyan
+                                    ? AppColors.neonGreen
                                     : AppColors.textSecondary,
                                 shape: BoxShape.circle,
                               ),
@@ -405,9 +405,10 @@ class _ExperienceTimelineCard extends StatelessWidget {
                           BadgeChip(
                             label: 'Notice: ${profile!.noticePeriod}',
                             backgroundColor:
-                                AppColors.emeraldLive.withOpacity(0.1),
-                            borderColor: AppColors.emeraldLive.withOpacity(0.3),
-                            textColor: AppColors.emeraldLive,
+                                AppColors.neonGreen.withValues(alpha: 0.1),
+                            borderColor:
+                                AppColors.neonGreen.withValues(alpha: 0.3),
+                            textColor: AppColors.neonGreen,
                           ),
                           BadgeChip(
                             label: 'Expected: ${profile!.targetCTC}',
@@ -446,99 +447,105 @@ class _EducationSection extends StatelessWidget {
             const Icon(
               Icons.school_outlined,
               size: 16,
-              color: AppColors.flutterCyan,
+              color: AppColors.neonGreen,
             ),
             const SizedBox(width: 8),
             Text(
               'EDUCATION',
               style: AppTypography.monoBold(
                 fontSize: 12,
-                color: AppColors.flutterCyan,
+                color: AppColors.neonGreen,
                 letterSpacing: 1.2,
               ),
             ),
           ],
         ),
         const SizedBox(height: 16),
-        ...education.map((item) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: HoverCard(
-              padding: const EdgeInsets.all(20),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 2, right: 14),
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: AppColors.flutterCyan.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: AppColors.flutterCyan.withOpacity(0.25),
+        ...education.asMap().entries.map((entry) {
+          final index = entry.key;
+          final item = entry.value;
+
+          return ScrollReveal(
+            delay: Duration(milliseconds: 100 + (index * 90)),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: HoverCard(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 2, right: 14),
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppColors.neonGreen.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: AppColors.neonGreen.withValues(alpha: 0.25),
+                        ),
+                      ),
+                      child: const Icon(
+                        Icons.school,
+                        size: 20,
+                        color: AppColors.neonGreen,
                       ),
                     ),
-                    child: const Icon(
-                      Icons.school,
-                      size: 20,
-                      color: AppColors.flutterCyan,
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Wrap(
-                          alignment: WrapAlignment.spaceBetween,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          spacing: 8,
-                          runSpacing: 4,
-                          children: [
-                            Text(
-                              item.degree,
-                              style: AppTypography.sansBold(
-                                fontSize: 15,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 3),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF15151A),
-                                borderRadius: BorderRadius.circular(4),
-                                border: Border.all(color: AppColors.border),
-                              ),
-                              child: Text(
-                                item.period,
-                                style: AppTypography.mono(
-                                  fontSize: 11,
-                                  color: AppColors.textMuted,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Wrap(
+                            alignment: WrapAlignment.spaceBetween,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            spacing: 8,
+                            runSpacing: 4,
+                            children: [
+                              Text(
+                                item.degree,
+                                style: AppTypography.sansBold(
+                                  fontSize: 15,
+                                  color: Colors.white,
                                 ),
                               ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF15151A),
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(color: AppColors.border),
+                                ),
+                                child: Text(
+                                  item.period,
+                                  style: AppTypography.mono(
+                                    fontSize: 11,
+                                    color: AppColors.textMuted,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            item.institution,
+                            style: AppTypography.sans(
+                              fontSize: 13,
+                              color: AppColors.textSecondary,
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          item.institution,
-                          style: AppTypography.sans(
-                            fontSize: 13,
-                            color: AppColors.textSecondary,
                           ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          item.location,
-                          style: AppTypography.mono(
-                            fontSize: 11,
-                            color: AppColors.textMuted,
+                          const SizedBox(height: 2),
+                          Text(
+                            item.location,
+                            style: AppTypography.mono(
+                              fontSize: 11,
+                              color: AppColors.textMuted,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );
@@ -563,71 +570,78 @@ class _SkillsGrid extends StatelessWidget {
             const Icon(
               Icons.bolt_outlined,
               size: 16,
-              color: AppColors.flutterCyan,
+              color: AppColors.neonGreen,
             ),
             const SizedBox(width: 8),
             Text(
               'TECHNICAL PROFICIENCIES',
               style: AppTypography.monoBold(
                 fontSize: 12,
-                color: AppColors.flutterCyan,
+                color: AppColors.neonGreen,
                 letterSpacing: 1.2,
               ),
             ),
           ],
         ),
         const SizedBox(height: 16),
-        ...skills.map((cat) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: HoverCard(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        cat.indexLabel,
-                        style: AppTypography.mono(
-                          fontSize: 11,
-                          color: AppColors.flutterCyan,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 1.0,
+        ...skills.asMap().entries.map((entry) {
+          final index = entry.key;
+          final cat = entry.value;
+
+          return ScrollReveal(
+            delay: Duration(milliseconds: 150 + (index * 90)),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: HoverCard(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          cat.indexLabel,
+                          style: AppTypography.mono(
+                            fontSize: 11,
+                            color: AppColors.neonGreen,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 1.0,
+                          ),
                         ),
-                      ),
-                      const Icon(
-                        Icons.terminal,
-                        size: 16,
-                        color: AppColors.textMuted,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    cat.title,
-                    style: AppTypography.sansBold(
-                      fontSize: 16,
-                      color: Colors.white,
+                        const Icon(
+                          Icons.terminal,
+                          size: 16,
+                          color: AppColors.textMuted,
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    cat.description,
-                    style: AppTypography.sans(
-                      fontSize: 13,
-                      color: AppColors.textSecondary,
-                      height: 1.5,
+                    const SizedBox(height: 8),
+                    Text(
+                      cat.title,
+                      style: AppTypography.sansBold(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 14),
-                  Wrap(
-                    spacing: 6,
-                    runSpacing: 6,
-                    children: cat.tags.map((t) => BadgeChip(label: t)).toList(),
-                  ),
-                ],
+                    const SizedBox(height: 8),
+                    Text(
+                      cat.description,
+                      style: AppTypography.sans(
+                        fontSize: 13,
+                        color: AppColors.textSecondary,
+                        height: 1.5,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      children:
+                          cat.tags.map((t) => BadgeChip(label: t)).toList(),
+                    ),
+                  ],
+                ),
               ),
             ),
           );

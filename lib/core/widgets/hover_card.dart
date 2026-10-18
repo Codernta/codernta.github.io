@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
+import 'cyber_interactive_card.dart';
 
 /// Interactive card that elevates and highlights borders smoothly when hovered on web/desktop.
-class HoverCard extends StatefulWidget {
+class HoverCard extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry padding;
   final Color backgroundColor;
@@ -10,62 +11,31 @@ class HoverCard extends StatefulWidget {
   final Color hoverBorderColor;
   final double borderRadius;
   final VoidCallback? onTap;
+  final bool enableTilt;
 
   const HoverCard({
     super.key,
     required this.child,
     this.padding = const EdgeInsets.all(24),
-    this.backgroundColor = AppColors.card,
-    this.borderColor = AppColors.border,
-    this.hoverBorderColor = AppColors.flutterCyan,
+    this.backgroundColor = const Color(0xFF111114),
+    this.borderColor = const Color(0xFF27272A),
+    this.hoverBorderColor = AppColors.neonGreen,
     this.borderRadius = 16.0,
     this.onTap,
+    this.enableTilt = true,
   });
 
   @override
-  State<HoverCard> createState() => _HoverCardState();
-}
-
-class _HoverCardState extends State<HoverCard> {
-  bool _isHovered = false;
-
-  @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: widget.onTap != null
-          ? SystemMouseCursors.click
-          : SystemMouseCursors.basic,
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeOutCubic,
-          padding: widget.padding,
-          decoration: BoxDecoration(
-            color: _isHovered
-                ? widget.backgroundColor.withValues(alpha: 0.95)
-                : widget.backgroundColor,
-            borderRadius: BorderRadius.circular(widget.borderRadius),
-            border: Border.all(
-              color: _isHovered ? widget.hoverBorderColor : widget.borderColor,
-              width: 1.2,
-            ),
-            boxShadow: _isHovered
-                ? [
-                    BoxShadow(
-                      color: widget.hoverBorderColor.withValues(alpha: 0.08),
-                      blurRadius: 20,
-                      spreadRadius: 2,
-                      offset: const Offset(0, 4),
-                    ),
-                  ]
-                : [],
-          ),
-          child: widget.child,
-        ),
-      ),
+    return CyberInteractiveCard(
+      padding: padding,
+      backgroundColor: backgroundColor,
+      borderColor: borderColor,
+      hoverBorderColor: hoverBorderColor,
+      borderRadius: borderRadius,
+      onTap: onTap,
+      enableTilt: enableTilt,
+      child: child,
     );
   }
 }

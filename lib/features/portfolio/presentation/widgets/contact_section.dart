@@ -3,7 +3,10 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/utils/responsive_layout.dart';
 import '../../../../core/utils/url_launcher_helper.dart';
+import '../../../../core/widgets/cyber_interactive_card.dart';
 import '../../../../core/widgets/primary_button.dart';
+import '../../../../core/widgets/pulsing_radar_dot.dart';
+import '../../../../core/widgets/scroll_reveal.dart';
 import '../../domain/entities/developer_profile.dart';
 import '../controllers/portfolio_controller.dart';
 
@@ -72,39 +75,41 @@ $message
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Section Header
-          Center(
-            child: Column(
-              children: [
-                Text(
-                  '// DIRECT ACCESS',
-                  style: AppTypography.monoBold(
-                    fontSize: 11,
-                    color: AppColors.neonGreen,
-                    letterSpacing: 1.2,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Get In Touch',
-                  style: AppTypography.displayBold(
-                    fontSize: isMobile ? 28 : 40,
-                    color: Colors.white,
-                    letterSpacing: -0.5,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 540),
-                  child: Text(
-                    'Available for immediate hire (0 Notice). Reach out directly or send a message.',
-                    textAlign: TextAlign.center,
-                    style: AppTypography.mono(
-                      fontSize: 13,
-                      color: const Color(0xFFA1A1AA),
+          ScrollReveal(
+            child: Center(
+              child: Column(
+                children: [
+                  Text(
+                    '// DIRECT ACCESS',
+                    style: AppTypography.monoBold(
+                      fontSize: 11,
+                      color: AppColors.neonGreen,
+                      letterSpacing: 1.2,
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  Text(
+                    'Get In Touch',
+                    style: AppTypography.displayBold(
+                      fontSize: isMobile ? 28 : 40,
+                      color: Colors.white,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 540),
+                    child: Text(
+                      'Available for immediate hire (0 Notice). Reach out directly or send a message.',
+                      textAlign: TextAlign.center,
+                      style: AppTypography.mono(
+                        fontSize: 13,
+                        color: const Color(0xFFA1A1AA),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 48),
@@ -116,21 +121,32 @@ $message
               children: [
                 Expanded(
                   flex: 6,
-                  child: _buildContactForm(context),
+                  child: ScrollReveal(
+                    delay: const Duration(milliseconds: 100),
+                    child: _buildContactForm(context),
+                  ),
                 ),
                 const SizedBox(width: 36),
                 Expanded(
                   flex: 6,
-                  child: _buildRightContactCards(context),
+                  child: ScrollReveal(
+                    delay: const Duration(milliseconds: 200),
+                    child: _buildRightContactCards(context),
+                  ),
                 ),
               ],
             )
           else
             Column(
               children: [
-                _buildContactForm(context),
+                ScrollReveal(
+                  child: _buildContactForm(context),
+                ),
                 const SizedBox(height: 36),
-                _buildRightContactCards(context),
+                ScrollReveal(
+                  delay: const Duration(milliseconds: 150),
+                  child: _buildRightContactCards(context),
+                ),
               ],
             ),
         ],
@@ -139,13 +155,12 @@ $message
   }
 
   Widget _buildContactForm(BuildContext context) {
-    return Container(
+    return CyberInteractiveCard(
       padding: const EdgeInsets.all(28),
-      decoration: BoxDecoration(
-        color: const Color(0xFF111114),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFF27272A), width: 1.2),
-      ),
+      borderRadius: 20,
+      enableTilt: true,
+      maxTilt: 0.03,
+      liftOffset: -4,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -221,7 +236,8 @@ $message
             fontSize: 12,
             color: const Color(0xFF52525B),
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           border: InputBorder.none,
         ),
       ),
@@ -233,36 +249,35 @@ $message
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // Location Graphic Card matching Stitch
-        Container(
+        CyberInteractiveCard(
           padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: const Color(0xFF070708),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: const Color(0xFF27272A)),
-          ),
+          borderRadius: 20,
+          enableTilt: true,
+          maxTilt: 0.04,
+          liftOffset: -5,
           child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(6),
                       border: Border.all(color: AppColors.neonGreen),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.neonGreen.withValues(alpha: 0.3),
+                          blurRadius: 8,
+                        ),
+                      ],
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Container(
-                          width: 6,
-                          height: 6,
-                          decoration: const BoxDecoration(
-                            color: AppColors.neonGreen,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
+                        const PulsingRadarDot(size: 6),
                         const SizedBox(width: 6),
                         Text(
                           'CURRENT BASE: INDIA',
@@ -284,7 +299,7 @@ $message
                 ],
               ),
               const SizedBox(height: 28),
-              // Pin Icon
+              // Pin Icon with pulsing glow
               Container(
                 width: 48,
                 height: 48,
@@ -293,8 +308,9 @@ $message
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFFEF4444).withValues(alpha: 0.5),
-                      blurRadius: 20,
+                      color: const Color(0xFFEF4444).withValues(alpha: 0.6),
+                      blurRadius: 24,
+                      spreadRadius: 2,
                     ),
                   ],
                 ),
@@ -303,7 +319,8 @@ $message
               ),
               const SizedBox(height: 12),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: const Color(0xFF111114),
                   borderRadius: BorderRadius.circular(100),
@@ -376,13 +393,15 @@ $message
               icon: Icons.code,
               label: 'CODE REPOSITORY',
               value: 'github.com/codernta',
-              onTap: () => UrlLauncherHelper.launchUrl('https://github.com/codernta'),
+              onTap: () =>
+                  UrlLauncherHelper.launchUrl('https://github.com/codernta'),
             ),
             _buildContactPill(
               icon: Icons.share,
               label: 'PROFESSIONAL',
               value: 'linkedin.com/in/codernta',
-              onTap: () => UrlLauncherHelper.launchUrl('https://linkedin.com/in/codernta'),
+              onTap: () => UrlLauncherHelper.launchUrl(
+                  'https://linkedin.com/in/codernta'),
             ),
           ],
         ),
@@ -396,48 +415,44 @@ $message
     required String value,
     required VoidCallback onTap,
   }) {
-    return InkWell(
+    return CyberInteractiveCard(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: const Color(0xFF111114),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFF27272A)),
-        ),
-        child: Row(
-          children: [
-            Icon(icon, color: AppColors.neonGreen, size: 20),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    label,
-                    style: AppTypography.mono(
-                      fontSize: 9,
-                      color: const Color(0xFF71717A),
-                      letterSpacing: 0.5,
-                    ),
+      borderRadius: 12,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      enableTilt: true,
+      maxTilt: 0.03,
+      liftOffset: -3,
+      child: Row(
+        children: [
+          Icon(icon, color: AppColors.neonGreen, size: 20),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  label,
+                  style: AppTypography.mono(
+                    fontSize: 9,
+                    color: const Color(0xFF71717A),
+                    letterSpacing: 0.5,
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    value,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.monoBold(
-                      fontSize: 11,
-                      color: Colors.white,
-                    ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  value,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.monoBold(
+                    fontSize: 11,
+                    color: Colors.white,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
