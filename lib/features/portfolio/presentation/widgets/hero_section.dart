@@ -158,13 +158,13 @@ class _HeroSectionState extends State<HeroSection>
         Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
           alignment: isMobile ? WrapAlignment.center : WrapAlignment.start,
-          spacing: 12,
-          runSpacing: 8,
+          spacing: 14,
+          runSpacing: 10,
           children: [
             Text(
-              'Hi, Nithin T A—',
+              'Nithin T A',
               style: AppTypography.displayExtraBold(
-                fontSize: isMobile ? 36 : 60,
+                fontSize: isMobile ? 36 : 58,
                 color: Colors.white,
                 letterSpacing: -1.0,
                 height: 1.1,
@@ -179,7 +179,7 @@ class _HeroSectionState extends State<HeroSection>
                   child: Container(
                     padding: EdgeInsets.symmetric(
                       horizontal: isMobile ? 12 : 18,
-                      vertical: isMobile ? 4 : 8,
+                      vertical: isMobile ? 5 : 8,
                     ),
                     decoration: BoxDecoration(
                       color: AppColors.neonGreen,
@@ -195,9 +195,9 @@ class _HeroSectionState extends State<HeroSection>
                       ],
                     ),
                     child: Text(
-                      'FLUTTER DEVELOPER',
+                      'SENIOR FLUTTER DEVELOPER',
                       style: AppTypography.displayBold(
-                        fontSize: isMobile ? 22 : 36,
+                        fontSize: isMobile ? 18 : 30,
                         color: Colors.black,
                         letterSpacing: 0.5,
                       ),
