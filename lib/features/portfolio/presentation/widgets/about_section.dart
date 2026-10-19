@@ -4,6 +4,7 @@ import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/utils/responsive_layout.dart';
 import '../../../../core/utils/url_launcher_helper.dart';
+import '../../../../core/widgets/cyber_image_loader.dart';
 import '../../../../core/widgets/cyber_interactive_card.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../../../core/widgets/pulsing_radar_dot.dart';
@@ -125,16 +126,13 @@ class AboutSection extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Image.asset(
-                    'assets/images/nithin_profile.png',
+                  CyberProfileImage(
+                    imagePath: 'assets/images/nithin_profile.png',
+                    fallbackPath: 'assets/images/nithin_cutout.png',
+                    borderRadius: BorderRadius.circular(16),
                     fit: BoxFit.cover,
                     alignment: Alignment.topCenter,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Image.asset(
-                        'assets/images/nithin_cutout.png',
-                        fit: BoxFit.cover,
-                      );
-                    },
+                    loadingLabel: 'BIOMETRIC_FEED',
                   ),
                   // Dark Vignette Overlay
                   Container(
