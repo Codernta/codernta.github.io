@@ -68,7 +68,7 @@ class _VibrantMetricsBannerState extends State<VibrantMetricsBanner>
                         ),
                         _buildDivider(),
                         _AnimatedStatItem(
-                          numericTarget: 5,
+                          numericTarget: 7,
                           suffix: '+ Apps',
                           label: 'LIVE ON PLAY STORE',
                         ),
@@ -105,7 +105,7 @@ class _VibrantMetricsBannerState extends State<VibrantMetricsBanner>
                         SizedBox(
                           width: isMobile ? 140 : 180,
                           child: _AnimatedStatItem(
-                            numericTarget: 5,
+                            numericTarget: 7,
                             suffix: '+ Apps',
                             label: 'LIVE ON PLAY STORE',
                             isFlex: false,

@@ -214,7 +214,7 @@ class _HeroSectionState extends State<HeroSection>
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 620),
           child: Text(
-            'Specialized in Clean Architecture, BLoC, high-throughput Socket.IO real-time systems, and 120 FPS custom canvas rendering. Shipped 5+ enterprise and consumer mobile applications with seamless hardware and cloud integration.',
+            'Specialized in Clean Architecture, BLoC, high-throughput Socket.IO real-time systems, and 120 FPS custom canvas rendering. Shipped 7+ enterprise and consumer mobile applications with seamless hardware and cloud integration.',
             textAlign: isMobile ? TextAlign.center : TextAlign.start,
             style: AppTypography.mono(
               fontSize: isMobile ? 13 : 15,

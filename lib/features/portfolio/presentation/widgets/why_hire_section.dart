@@ -143,6 +143,7 @@ class WhyHireSection extends StatelessWidget {
                 'https://codernta.lovable.app',
             mediumUrl: profile.contactLinks['medium'] ??
                 'https://medium.com/@codernta',
+            resumeUrl: profile.contactLinks['resume'],
           ),
         ],
       ),

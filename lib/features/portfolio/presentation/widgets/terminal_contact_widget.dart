@@ -9,6 +9,7 @@ class TerminalContactWidget extends StatelessWidget {
   final String phone;
   final String portfolioUrl;
   final String? mediumUrl;
+  final String? resumeUrl;
 
   const TerminalContactWidget({
     super.key,
@@ -16,6 +17,7 @@ class TerminalContactWidget extends StatelessWidget {
     required this.phone,
     required this.portfolioUrl,
     this.mediumUrl,
+    this.resumeUrl,
   });
 
   void _copyToClipboard(BuildContext context, String text, String label) {
@@ -197,6 +199,21 @@ class TerminalContactWidget extends StatelessWidget {
                         icon: Icons.article_outlined,
                         isPrimary: true,
                         onTap: () => UrlLauncherHelper.launchURL(mediumUrl!),
+                      ),
+                    ],
+                  ),
+                ],
+                if (resumeUrl != null) ...[
+                  const SizedBox(height: 14),
+                  _TerminalRow(
+                    label: 'OFFICIAL RESUME / CV',
+                    value: 'Google Drive Document (PDF)',
+                    actions: [
+                      _TerminalButton(
+                        label: 'View / Download ↗',
+                        icon: Icons.download_rounded,
+                        isPrimary: true,
+                        onTap: () => UrlLauncherHelper.launchURL(resumeUrl!),
                       ),
                     ],
                   ),

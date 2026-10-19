@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/utils/responsive_layout.dart';
 import '../../../../core/utils/url_launcher_helper.dart';
@@ -354,9 +355,8 @@ class AboutSection extends StatelessWidget {
               label: 'DOWNLOAD CV / RESUME',
               variant: ButtonVariant.primary,
               showArrow: true,
-              onPressed: () => UrlLauncherHelper.launchEmail(
-                'codernta@gmail.com',
-                subject: 'Resume Request - Senior Flutter Developer',
+              onPressed: () => UrlLauncherHelper.launchUrl(
+                profile.contactLinks['resume'] ?? AppStrings.resumeUrl,
               ),
             ),
             PrimaryButton(

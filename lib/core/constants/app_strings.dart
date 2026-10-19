@@ -22,7 +22,7 @@ class AppStrings {
   // Stats
   static const String statYears = '4+';
   static const String statYearsLabel = 'Years Exp';
-  static const String statApps = '5+';
+  static const String statApps = '7+';
   static const String statAppsLabel = 'Live Apps';
   static const String statPkg = '1';
   static const String statPkgLabel = 'Pub.dev Pkg';
@@ -37,6 +37,8 @@ class AppStrings {
   static const String phoneNumber = '+91 8075776122';
   static const String whatsAppUrl = 'https://wa.me/918075776122';
   static const String playStoreBaseUrl = 'https://play.google.com';
+  static const String resumeUrl =
+      'https://drive.google.com/file/d/1wMiyYuUR3z7vXSxuu8vPeeqrUaXyOCao/view?usp=sharing';
 
   // Navigation Links
   static const String navWork = '// WORK';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/utils/responsive_layout.dart';
 import '../../../../core/utils/url_launcher_helper.dart';
@@ -110,6 +111,11 @@ class FooterSection extends StatelessWidget {
         _buildFooterLink('Live Projects', () {}),
         _buildFooterLink('Pub.dev Package', () {
           UrlLauncherHelper.launchUrl('https://pub.dev/packages/bharat_fx');
+        }),
+        _buildFooterLink('Download CV / Resume', () {
+          UrlLauncherHelper.launchUrl(
+            profile.contactLinks['resume'] ?? AppStrings.resumeUrl,
+          );
         }),
       ],
     );

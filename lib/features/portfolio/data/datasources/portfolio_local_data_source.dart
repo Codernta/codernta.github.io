@@ -40,7 +40,7 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
       stats: {
         'years': '4+',
         'yearsLabel': 'Years Exp',
-        'apps': '5+',
+        'apps': '7+',
         'appsLabel': 'Live Apps',
         'pkg': '1',
         'pkgLabel': 'Pub.dev Pkg',
@@ -53,6 +53,8 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
         'medium': 'https://medium.com/@codernta',
         'portfolio': 'https://codernta.github.io',
         'pubdev': 'https://pub.dev/packages/bharat_fx',
+        'resume':
+            'https://drive.google.com/file/d/1wMiyYuUR3z7vXSxuu8vPeeqrUaXyOCao/view?usp=sharing',
       },
     );
   }
