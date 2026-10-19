@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/utils/responsive_layout.dart';
-import '../../../../core/widgets/cyber_image_loader.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../../../core/widgets/pulsing_radar_dot.dart';
 import '../../../../core/widgets/scroll_reveal.dart';
@@ -410,14 +409,15 @@ class _HeroSectionState extends State<HeroSection>
                     ),
                   ),
                   child: ClipOval(
-                    child: CyberProfileImage(
-                      imagePath: 'assets/images/nithin_profile.png',
-                      fallbackPath: 'assets/images/nithin_cutout.png',
-                      isCircle: true,
+                    child: Image.asset(
+                      'assets/images/nithin_profile.png',
                       fit: BoxFit.cover,
-                      width: avatarSize,
-                      height: avatarSize,
-                      loadingLabel: 'AVATAR_STREAM',
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          'assets/images/nithin_cutout.png',
+                          fit: BoxFit.cover,
+                        );
+                      },
                     ),
                   ),
                 );
