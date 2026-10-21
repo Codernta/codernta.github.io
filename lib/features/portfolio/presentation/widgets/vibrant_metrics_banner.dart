@@ -74,8 +74,9 @@ class _VibrantMetricsBannerState extends State<VibrantMetricsBanner>
                         ),
                         _buildDivider(),
                         _AnimatedStatItem(
-                          customText: 'Bharat FX',
-                          label: 'PUB.DEV PACKAGE AUTHOR',
+                          numericTarget: 2,
+                          suffix: ' Pkgs',
+                          label: 'PUB.DEV PACKAGES AUTHOR',
                         ),
                       ],
                     )
@@ -114,8 +115,9 @@ class _VibrantMetricsBannerState extends State<VibrantMetricsBanner>
                         SizedBox(
                           width: isMobile ? 140 : 180,
                           child: _AnimatedStatItem(
-                            customText: 'Bharat FX',
-                            label: 'PUB.DEV PACKAGE',
+                            numericTarget: 2,
+                            suffix: ' Pkgs',
+                            label: 'PUB.DEV PACKAGES',
                             isFlex: false,
                           ),
                         ),
@@ -165,16 +167,14 @@ class _VibrantMetricsBannerState extends State<VibrantMetricsBanner>
 }
 
 class _AnimatedStatItem extends StatefulWidget {
-  final int? numericTarget;
+  final int numericTarget;
   final String? suffix;
-  final String? customText;
   final String label;
   final bool isFlex;
 
   const _AnimatedStatItem({
-    this.numericTarget,
+    required this.numericTarget,
     this.suffix,
-    this.customText,
     required this.label,
     this.isFlex = true,
   });
@@ -188,37 +188,24 @@ class _AnimatedStatItemState extends State<_AnimatedStatItem> {
 
   @override
   Widget build(BuildContext context) {
-    Widget textWidget;
-    if (widget.numericTarget != null) {
-      textWidget = TweenAnimationBuilder<double>(
-        tween: Tween<double>(begin: 0.0, end: widget.numericTarget!.toDouble()),
-        duration: const Duration(milliseconds: 1400),
-        curve: Curves.easeOutExpo,
-        builder: (context, value, _) {
-          final displayInt = value.round();
-          final text = '$displayInt${widget.suffix ?? ''}';
-          return Text(
-            text,
-            textAlign: TextAlign.center,
-            style: AppTypography.displayBold(
-              fontSize: 30,
-              color: Colors.black,
-              letterSpacing: -0.5,
-            ),
-          );
-        },
-      );
-    } else {
-      textWidget = Text(
-        widget.customText ?? '',
-        textAlign: TextAlign.center,
-        style: AppTypography.displayBold(
-          fontSize: 30,
-          color: Colors.black,
-          letterSpacing: -0.5,
-        ),
-      );
-    }
+    final textWidget = TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0.0, end: widget.numericTarget.toDouble()),
+      duration: const Duration(milliseconds: 1400),
+      curve: Curves.easeOutExpo,
+      builder: (context, value, _) {
+        final displayInt = value.round();
+        final text = '$displayInt${widget.suffix ?? ''}';
+        return Text(
+          text,
+          textAlign: TextAlign.center,
+          style: AppTypography.displayBold(
+            fontSize: 30,
+            color: Colors.black,
+            letterSpacing: -0.5,
+          ),
+        );
+      },
+    );
 
     final content = MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),

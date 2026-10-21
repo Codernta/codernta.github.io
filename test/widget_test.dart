@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:portfolio/features/portfolio/data/datasources/portfolio_local_data_source.dart';
 import 'package:portfolio/features/portfolio/data/repositories/portfolio_repository_impl.dart';
@@ -12,12 +13,15 @@ void main() {
     final getPortfolioData = GetPortfolioData(repository);
     final controller = PortfolioController(getPortfolioData: getPortfolioData);
 
+    // Pre-load data so widget tree renders the loaded portfolio immediately
+    await controller.loadPortfolio();
+
     await tester.pumpWidget(PortfolioApp(controller: controller));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 500));
+    await tester.pump(const Duration(milliseconds: 100));
 
     expect(find.text('SENIOR FLUTTER DEVELOPER'), findsOneWidget);
     expect(find.text('NITHIN T A'), findsWidgets);
+    expect(find.text('haptic_flow 📳'), findsWidgets);
     expect(find.text('Bharat FX 🇮🇳'), findsOneWidget);
     expect(find.text('Petbae'), findsOneWidget);
     expect(find.text('Demeter'), findsOneWidget);
@@ -26,5 +30,9 @@ void main() {
     expect(find.text('Innobayt Innovative Solutions LLC'), findsOneWidget);
     expect(find.text('UL Technologies Pvt Ltd'), findsOneWidget);
     expect(find.text('Limenzy Technologies Pvt Ltd'), findsOneWidget);
+
+    // Unmount widget tree to cleanly cancel infinite animation tickers
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(const Duration(milliseconds: 500));
   });
 }

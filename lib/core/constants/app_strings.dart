@@ -24,14 +24,17 @@ class AppStrings {
   static const String statYearsLabel = 'Years Exp';
   static const String statApps = '7+';
   static const String statAppsLabel = 'Live Apps';
-  static const String statPkg = '1';
-  static const String statPkgLabel = 'Pub.dev Pkg';
+  static const String statPkg = '2';
+  static const String statPkgLabel = 'Pub.dev Pkgs';
 
   // External URLs
   static const String githubUrl = 'https://github.com/codernta';
   static const String linkedinUrl = 'https://linkedin.com/in/codernta';
   static const String mediumUrl = 'https://medium.com/@codernta';
-  static const String pubDevUrl = 'https://pub.dev/packages/bharat_fx';
+  static const String pubDevUrl = 'https://pub.dev/packages/haptic_flow';
+  static const String pubDevHapticFlowUrl = 'https://pub.dev/packages/haptic_flow';
+  static const String pubDevBharatFxUrl = 'https://pub.dev/packages/bharat_fx';
+  static const String githubHapticFlowUrl = 'https://github.com/Codernta/haptic_flow';
   static const String portfolioUrl = 'https://codernta.github.io';
   static const String emailAddress = 'codernta@gmail.com';
   static const String phoneNumber = '+91 8075776122';

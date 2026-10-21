@@ -17,7 +17,7 @@ The portfolio is deployed live at: **[https://codernta.github.io](https://codern
 ## ⚡ Highlights
 - **4+ Years Production Experience**: Ex-IIC Web Solutions, Innobayt Technologies, UL Technologies, Limenzy Technologies.
 - **Immediate Joiner**: 0 days notice period, based in Calicut, Kerala / Open to remote & onsite worldwide.
-- **Open Source Creator**: Author of [`bharat_fx`](https://pub.dev/packages/bharat_fx) — high-precision fintech, NPCI UPI security & Indian financial formatting suite for Flutter & Dart.
+- **Open Source Creator**: Author of [`haptic_flow`](https://pub.dev/packages/haptic_flow) (declarative haptic choreography engine & tactile physics for Flutter) and [`bharat_fx`](https://pub.dev/packages/bharat_fx) (high-precision fintech, NPCI UPI security & Indian financial formatting suite for Flutter & Dart).
 - **7+ Commercial Mobile Apps**: Shipped production applications with IoT hardware communication, BLE, thermal printing, and POS integration.
 - **Cyber-Neon Futuristic UI**: Designed with high-performance Flutter canvas shaders, particle backdrops, and interactive orbital radar animations.
 

@@ -13,7 +13,7 @@ import '../../../../core/widgets/section_header.dart';
 import '../../domain/entities/open_source_package.dart';
 import '../controllers/portfolio_controller.dart';
 
-class OpenSourceSection extends StatelessWidget {
+class OpenSourceSection extends StatefulWidget {
   final List<OpenSourcePackage> packages;
   final PortfolioController controller;
 
@@ -24,27 +24,44 @@ class OpenSourceSection extends StatelessWidget {
   });
 
   @override
+  State<OpenSourceSection> createState() => _OpenSourceSectionState();
+}
+
+class _OpenSourceSectionState extends State<OpenSourceSection> {
+  int _selectedPackageIndex = 0;
+
+  @override
   Widget build(BuildContext context) {
-    if (packages.isEmpty) return const SizedBox.shrink();
-    final pkg = packages.first;
+    if (widget.packages.isEmpty) return const SizedBox.shrink();
     final isDesktop = ResponsiveLayout.isDesktop(context);
     final isMobile = ResponsiveLayout.isMobile(context);
+    final currentPkg = widget.packages[
+        _selectedPackageIndex.clamp(0, widget.packages.length - 1)];
 
     return Container(
-      key: controller.openSourceKey,
+      key: widget.controller.openSourceKey,
       padding: EdgeInsets.symmetric(vertical: isMobile ? 40 : 60),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ScrollReveal(
             child: const SectionHeader(
-              label: '01 / OPEN-SOURCE FINTECH CONTRIBUTION',
-              title: 'PUB.DEV PACKAGE AUTHOR: BHARAT FX 🇮🇳',
+              label: '01 / OPEN-SOURCE PACKAGES & ENGINES',
+              title: 'PUB.DEV PACKAGE AUTHOR: DART & FLUTTER 🚀',
               subtitle:
-                  'Enterprise-grade, 100% dependency-free Flutter & Dart toolkit designed specifically for Indian localization, fintech, and banking applications.',
+                  'Production-grade open-source packages published on pub.dev. Engineered with Clean Architecture, pure Dart foundations, 100% testability, and zero third-party dependencies.',
             ),
           ),
-          const SizedBox(height: 28),
+          const SizedBox(height: 24),
+
+          // Dual-Package Spotlight Switcher Cards
+          if (widget.packages.length > 1) ...[
+            ScrollReveal(
+              delay: const Duration(milliseconds: 100),
+              child: _buildPackageSelector(isDesktop: isDesktop, isMobile: isMobile),
+            ),
+            const SizedBox(height: 24),
+          ],
 
           // Main Hero Showcase Card with Staggered ScrollReveal
           ScrollReveal(
@@ -60,19 +77,23 @@ class OpenSourceSection extends StatelessWidget {
                       children: [
                         Expanded(
                           flex: 6,
-                          child: _PackageDetails(pkg: pkg),
+                          child: _PackageDetails(pkg: currentPkg),
                         ),
                         const SizedBox(width: 32),
-                        const Expanded(
+                        Expanded(
                           flex: 6,
-                          child: _FintechInteractiveSandbox(),
+                          child: currentPkg.title.toLowerCase().contains('haptic')
+                              ? const _HapticInteractiveSandbox()
+                              : const _FintechInteractiveSandbox(),
                         ),
                       ],
                     )
                   else ...[
-                    _PackageDetails(pkg: pkg),
+                    _PackageDetails(pkg: currentPkg),
                     const SizedBox(height: 28),
-                    const _FintechInteractiveSandbox(),
+                    currentPkg.title.toLowerCase().contains('haptic')
+                        ? const _HapticInteractiveSandbox()
+                        : const _FintechInteractiveSandbox(),
                   ],
                 ],
               ),
@@ -81,8 +102,11 @@ class OpenSourceSection extends StatelessWidget {
 
           const SizedBox(height: 36),
 
-          // 100% Dependency-Free & Strict Compliance Banner
-          _ComplianceTrustBanner(isMobile: isMobile),
+          // 100% Dependency-Free & Strict Compliance / Platform Banner
+          if (currentPkg.title.toLowerCase().contains('haptic'))
+            _HapticTrustBanner(isMobile: isMobile)
+          else
+            _ComplianceTrustBanner(isMobile: isMobile),
 
           const SizedBox(height: 36),
 
@@ -99,7 +123,7 @@ class OpenSourceSection extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               Text(
-                '🌟 8 KEY ARCHITECTURAL HIGHLIGHTS & MODULES',
+                '🌟 ${currentPkg.moduleHighlights.length} KEY ARCHITECTURAL HIGHLIGHTS & MODULES',
                 style: AppTypography.monoBold(
                   fontSize: isMobile ? 12 : 14,
                   color: Colors.white,
@@ -110,13 +134,168 @@ class OpenSourceSection extends StatelessWidget {
           ),
           const SizedBox(height: 20),
 
-          // 8 Key Highlights Grid
+          // Selected Package Key Highlights Grid
           _HighlightsGrid(
-            highlights: pkg.moduleHighlights,
+            highlights: currentPkg.moduleHighlights,
             isDesktop: isDesktop,
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildPackageSelector({required bool isDesktop, required bool isMobile}) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final cardWidth = isDesktop
+            ? (constraints.maxWidth - 20) / widget.packages.length
+            : constraints.maxWidth;
+
+        return Wrap(
+          spacing: 20,
+          runSpacing: 16,
+          children: List.generate(widget.packages.length, (index) {
+            final pkg = widget.packages[index];
+            final isSelected = index == _selectedPackageIndex;
+            final isHaptic = pkg.title.toLowerCase().contains('haptic');
+
+            return SizedBox(
+              width: cardWidth,
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () => setState(() => _selectedPackageIndex = index),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? const Color(0xFF13131A)
+                          : const Color(0xFF0C0C10),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: isSelected
+                            ? (isHaptic ? AppColors.neonGreen : AppColors.flutterCyan)
+                            : const Color(0xFF22222A),
+                        width: isSelected ? 1.8 : 1.0,
+                      ),
+                      boxShadow: isSelected
+                          ? [
+                              BoxShadow(
+                                color: (isHaptic
+                                        ? AppColors.neonGreen
+                                        : AppColors.flutterCyan)
+                                    .withValues(alpha: 0.18),
+                                blurRadius: 16,
+                                offset: const Offset(0, 4),
+                              ),
+                            ]
+                          : [],
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? (isHaptic
+                                    ? AppColors.neonGreen.withValues(alpha: 0.15)
+                                    : AppColors.flutterCyan.withValues(alpha: 0.15))
+                                : const Color(0xFF171720),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            isHaptic ? '📳' : '🇮🇳',
+                            style: const TextStyle(fontSize: 22),
+                          ),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    pkg.title,
+                                    style: AppTypography.sansBold(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  if (isHaptic) ...[
+                                    const SizedBox(width: 8),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 6, vertical: 2),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.neonGreen
+                                            .withValues(alpha: 0.2),
+                                        borderRadius: BorderRadius.circular(4),
+                                        border: Border.all(
+                                          color: AppColors.neonGreen
+                                              .withValues(alpha: 0.5),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        '🚀 v0.1.1 NEW',
+                                        style: AppTypography.monoBold(
+                                          fontSize: 9,
+                                          color: AppColors.neonGreen,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                              const SizedBox(height: 3),
+                              Text(
+                                pkg.subtitle,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTypography.mono(
+                                  fontSize: 11,
+                                  color: AppColors.textMuted,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? (isHaptic
+                                    ? AppColors.neonGreen
+                                    : AppColors.flutterCyan)
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                              color: isSelected
+                                  ? Colors.transparent
+                                  : const Color(0xFF33333F),
+                            ),
+                          ),
+                          child: Text(
+                            isSelected ? 'ACTIVE' : 'SELECT',
+                            style: AppTypography.monoBold(
+                              fontSize: 10,
+                              color: isSelected ? Colors.black : AppColors.textMuted,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }),
+        );
+      },
     );
   }
 }
@@ -127,13 +306,16 @@ class _PackageDetails extends StatelessWidget {
   const _PackageDetails({required this.pkg});
 
   void _copyDependency(BuildContext context) {
-    Clipboard.setData(const ClipboardData(text: 'bharat_fx: ^1.0.0'));
+    final isHaptic = pkg.title.toLowerCase().contains('haptic');
+    final depText =
+        isHaptic ? 'flutter pub add haptic_flow' : 'bharat_fx: ^1.0.0';
+    Clipboard.setData(ClipboardData(text: depText));
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: const Color(0xFF16161B),
         behavior: SnackBarBehavior.floating,
         content: Text(
-          'Copied "bharat_fx: ^1.0.0" to clipboard',
+          'Copied "$depText" to clipboard',
           style: AppTypography.mono(color: AppColors.flutterCyan),
         ),
         duration: const Duration(seconds: 2),
@@ -143,6 +325,8 @@ class _PackageDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isHaptic = pkg.title.toLowerCase().contains('haptic');
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -178,17 +362,19 @@ class _PackageDetails extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: AppColors.flutterCyan.withValues(alpha: 0.12),
+                color: (isHaptic ? AppColors.neonGreen : AppColors.flutterCyan)
+                    .withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(4),
                 border: Border.all(
-                  color: AppColors.flutterCyan.withValues(alpha: 0.3),
+                  color: (isHaptic ? AppColors.neonGreen : AppColors.flutterCyan)
+                      .withValues(alpha: 0.35),
                 ),
               ),
               child: Text(
                 'PUB.DEV VERIFIED',
                 style: AppTypography.monoBold(
                   fontSize: 10,
-                  color: AppColors.flutterCyan,
+                  color: isHaptic ? AppColors.neonGreen : AppColors.flutterCyan,
                 ),
               ),
             ),
@@ -209,11 +395,18 @@ class _PackageDetails extends StatelessWidget {
                 ),
               ),
             ),
-            const BadgeChip(
-              label: '140/140 PUB POINTS',
-              textColor: AppColors.amberBadge,
-              borderColor: AppColors.border,
-            ),
+            if (!isHaptic)
+              const BadgeChip(
+                label: '140/140 PUB POINTS',
+                textColor: AppColors.amberBadge,
+                borderColor: AppColors.border,
+              )
+            else
+              const BadgeChip(
+                label: 'v0.1.1 ON PUB.DEV',
+                textColor: AppColors.amberBadge,
+                borderColor: AppColors.border,
+              ),
             const BadgeChip(
               label: 'MIT LICENSE',
               textColor: AppColors.textSecondary,
@@ -236,7 +429,7 @@ class _PackageDetails extends StatelessWidget {
             pkg.subtitle,
             style: AppTypography.monoBold(
               fontSize: 13,
-              color: AppColors.flutterCyan,
+              color: isHaptic ? AppColors.neonGreen : AppColors.flutterCyan,
             ),
           ),
         ],
@@ -253,9 +446,11 @@ class _PackageDetails extends StatelessWidget {
         ),
         const SizedBox(height: 18),
 
-        // Compliance Guidelines Checklist Row
+        // Compliance Guidelines / Core Guarantees Checklist Row
         Text(
-          'STRICT REGULATORY COMPLIANCE BUILT-IN:',
+          isHaptic
+              ? 'CORE ARCHITECTURAL GUARANTEES:'
+              : 'STRICT REGULATORY COMPLIANCE BUILT-IN:',
           style: AppTypography.mono(
             fontSize: 10,
             color: AppColors.textMuted,
@@ -318,13 +513,15 @@ class _PackageDetails extends StatelessWidget {
               icon: Icons.rocket_launch_outlined,
               onPressed: () => UrlLauncherHelper.launchURL(pkg.pubDevUrl),
             ),
-            PrimaryButton(
-              label: 'MEDIUM BLOG',
-              variant: ButtonVariant.outline,
-              icon: Icons.article_outlined,
-              showArrow: false,
-              onPressed: () => UrlLauncherHelper.launchURL('https://medium.com/@codernta'),
-            ),
+            if (!isHaptic)
+              PrimaryButton(
+                label: 'MEDIUM BLOG',
+                variant: ButtonVariant.outline,
+                icon: Icons.article_outlined,
+                showArrow: false,
+                onPressed: () =>
+                    UrlLauncherHelper.launchURL('https://medium.com/@codernta'),
+              ),
             PrimaryButton(
               label: 'PACKAGE SOURCE',
               variant: ButtonVariant.outline,
@@ -332,7 +529,7 @@ class _PackageDetails extends StatelessWidget {
               onPressed: () => UrlLauncherHelper.launchURL(pkg.repositoryUrl),
             ),
             PrimaryButton(
-              label: 'COPY PUB SPEC',
+              label: isHaptic ? 'INSTALL CMD' : 'COPY PUB SPEC',
               variant: ButtonVariant.subtle,
               icon: Icons.copy,
               showArrow: false,
@@ -341,6 +538,823 @@ class _PackageDetails extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+class _HapticTrustBanner extends StatelessWidget {
+  final bool isMobile;
+
+  const _HapticTrustBanner({required this.isMobile});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 16 : 24,
+        vertical: 18,
+      ),
+      decoration: BoxDecoration(
+        color: const Color(0xFF0D1117),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: AppColors.neonGreen.withValues(alpha: 0.3)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: AppColors.neonGreen.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Text('📳', style: TextStyle(fontSize: 20)),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '100% PURE DART & FLUTTER // ZERO EXTERNAL RUNTIME DEPENDENCIES',
+                  style: AppTypography.monoBold(
+                    fontSize: 12,
+                    color: AppColors.neonGreen,
+                    letterSpacing: 0.8,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Zero transitive dependencies, security vulnerabilities, or platform channel bloat. Decoupled HapticDriver architecture includes bundled MockHapticDriver for 100% unit and widget test coverage. Seamless platform-safe no-op on web and unsupported desktop environments without unhandled exceptions. Granular scoped muting via HapticFeedbackBoundary.',
+                  style: AppTypography.sans(
+                    fontSize: 13,
+                    color: AppColors.textSecondary,
+                    height: 1.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HapticInteractiveSandbox extends StatefulWidget {
+  const _HapticInteractiveSandbox();
+
+  @override
+  State<_HapticInteractiveSandbox> createState() =>
+      _HapticInteractiveSandboxState();
+}
+
+class _HapticInteractiveSandboxState extends State<_HapticInteractiveSandbox>
+    with SingleTickerProviderStateMixin {
+  int _activeTab = 0;
+  String _selectedPreset = 'heartbeat';
+  bool _isPlayingPreset = false;
+  double _sliderValue = 50.0;
+  double _speedMultiplier = 1.0;
+  int _recordedEvents = 0;
+  late final AnimationController _waveController;
+
+  @override
+  void initState() {
+    super.initState();
+    _waveController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+  }
+
+  @override
+  void dispose() {
+    _waveController.dispose();
+    super.dispose();
+  }
+
+  void _triggerPreset(String preset) {
+    setState(() {
+      _selectedPreset = preset;
+      _isPlayingPreset = true;
+      _recordedEvents++;
+    });
+    _waveController.forward(from: 0.0).then((_) {
+      if (mounted) {
+        setState(() => _isPlayingPreset = false);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFF09090C),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Terminal Window Titlebar
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: const BoxDecoration(
+              color: Color(0xFF141418),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(11)),
+              border: Border(bottom: BorderSide(color: AppColors.border)),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 9,
+                  height: 9,
+                  decoration: const BoxDecoration(
+                    color: AppColors.terminalRed,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Container(
+                  width: 9,
+                  height: 9,
+                  decoration: const BoxDecoration(
+                    color: AppColors.terminalYellow,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Container(
+                  width: 9,
+                  height: 9,
+                  decoration: const BoxDecoration(
+                    color: AppColors.terminalGreen,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    'haptic_flow_engine.dart // Real-Time Tactile Simulator',
+                    style: AppTypography.mono(
+                      fontSize: 11,
+                      color: AppColors.textMuted,
+                    ),
+                  ),
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: AppColors.neonGreen.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(
+                      color: AppColors.neonGreen.withValues(alpha: 0.35),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const PulsingRadarDot(size: 5),
+                      const SizedBox(width: 5),
+                      Text(
+                        'PURE DART',
+                        style: AppTypography.monoBold(
+                          fontSize: 9,
+                          color: AppColors.neonGreen,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Interactive Mode Switcher Tabs
+          Container(
+            color: const Color(0xFF0F0F13),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  _SandboxTab(
+                    label: '🎛️ Physical Presets',
+                    isSelected: _activeTab == 0,
+                    onTap: () => setState(() => _activeTab = 0),
+                  ),
+                  const SizedBox(width: 6),
+                  _SandboxTab(
+                    label: '🎼 Sequence Builder',
+                    isSelected: _activeTab == 1,
+                    onTap: () => setState(() => _activeTab = 1),
+                  ),
+                  const SizedBox(width: 6),
+                  _SandboxTab(
+                    label: '🔤 Shorthand Notation',
+                    isSelected: _activeTab == 2,
+                    onTap: () => setState(() => _activeTab = 2),
+                  ),
+                  const SizedBox(width: 6),
+                  _SandboxTab(
+                    label: '🎚️ Widgets & MockDriver',
+                    isSelected: _activeTab == 3,
+                    onTap: () => setState(() => _activeTab = 3),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // Active Tab Content Area
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: _buildActiveSandboxContent(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActiveSandboxContent() {
+    switch (_activeTab) {
+      case 0:
+        return _buildPresetsTab();
+      case 1:
+        return _buildBuilderTab();
+      case 2:
+        return _buildNotationTab();
+      case 3:
+      default:
+        return _buildWidgetsAndTestingTab();
+    }
+  }
+
+  // TAB 1: Physical Presets with animated pulse graph
+  Widget _buildPresetsTab() {
+    String presetDetails;
+    String timingBreakdown;
+    List<double> barHeights;
+
+    switch (_selectedPreset) {
+      case 'mechanicalDial':
+        presetDetails = 'HapticPresets.mechanicalDial';
+        timingBreakdown = '5 crisp micro-detents [15ms tick, 40ms pause]';
+        barHeights = [0.3, 0.4, 0.5, 0.4, 0.6];
+        break;
+      case 'heartbeat':
+        presetDetails = 'HapticPresets.heartbeat';
+        timingBreakdown = 'Systolic [40ms] -> Diastole [120ms] -> Dub [80ms]';
+        barHeights = [0.5, 0.0, 0.95];
+        break;
+      case 'typewriter':
+        presetDetails = 'HapticPresets.typewriter';
+        timingBreakdown = 'Metal typebar strike [50ms] -> Escapement click [20ms]';
+        barHeights = [0.85, 0.35];
+        break;
+      case 'successSnap':
+        presetDetails = 'HapticPresets.successSnap';
+        timingBreakdown = 'First-stage tick [25ms] -> Confirm snap [70ms]';
+        barHeights = [0.4, 0.9];
+        break;
+      case 'diceRoll':
+      default:
+        presetDetails = 'HapticPresets.diceRoll';
+        timingBreakdown = 'Exponentially decelerating tumble [30ms, 25ms, 20ms, 15ms]';
+        barHeights = [0.9, 0.7, 0.5, 0.35, 0.2];
+        break;
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.spaceBetween,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            Text(
+              '// REAL-WORLD PHYSICAL PRESETS SIMULATOR',
+              style: AppTypography.mono(
+                fontSize: 11,
+                color: AppColors.neonGreen,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            GestureDetector(
+              onTap: () => _triggerPreset(_selectedPreset),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.neonGreen.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(
+                    color: AppColors.neonGreen.withValues(alpha: 0.45),
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      _isPlayingPreset ? Icons.waves : Icons.play_arrow,
+                      size: 12,
+                      color: AppColors.neonGreen,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      _isPlayingPreset ? 'PLAYING...' : 'TRIGGER HAPTIC',
+                      style: AppTypography.monoBold(
+                        fontSize: 10,
+                        color: AppColors.neonGreen,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+
+        // Preset Selector Chips
+        Wrap(
+          spacing: 6,
+          runSpacing: 6,
+          children: [
+            _PresetButton(
+              label: '⚙️ mechanicalDial',
+              isSelected: _selectedPreset == 'mechanicalDial',
+              onTap: () => _triggerPreset('mechanicalDial'),
+            ),
+            _PresetButton(
+              label: '🫀 heartbeat',
+              isSelected: _selectedPreset == 'heartbeat',
+              onTap: () => _triggerPreset('heartbeat'),
+            ),
+            _PresetButton(
+              label: '⌨️ typewriter',
+              isSelected: _selectedPreset == 'typewriter',
+              onTap: () => _triggerPreset('typewriter'),
+            ),
+            _PresetButton(
+              label: '✨ successSnap',
+              isSelected: _selectedPreset == 'successSnap',
+              onTap: () => _triggerPreset('successSnap'),
+            ),
+            _PresetButton(
+              label: '🎲 diceRoll',
+              isSelected: _selectedPreset == 'diceRoll',
+              onTap: () => _triggerPreset('diceRoll'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+
+        // Visual Tactile Pulse Oscilloscope Bar
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          decoration: BoxDecoration(
+            color: const Color(0xFF07070A),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFF1E1E26)),
+          ),
+          child: Row(
+            children: [
+              Text(
+                'TACTILE PULSE WAVE:',
+                style: AppTypography.mono(
+                  fontSize: 10,
+                  color: AppColors.textMuted,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: SizedBox(
+                  height: 28,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: barHeights.map((h) {
+                      return AnimatedBuilder(
+                        animation: _waveController,
+                        builder: (context, _) {
+                          final wave = _waveController.value;
+                          final activeHeight = (h * 24.0) * (0.4 + (0.6 * (1.0 - wave)));
+                          return Container(
+                            width: 14,
+                            height: activeHeight.clamp(4.0, 26.0),
+                            decoration: BoxDecoration(
+                              color: _isPlayingPreset
+                                  ? AppColors.neonGreen
+                                  : AppColors.flutterCyan.withValues(alpha: 0.6),
+                              borderRadius: BorderRadius.circular(3),
+                              boxShadow: _isPlayingPreset
+                                  ? [
+                                      BoxShadow(
+                                        color: AppColors.neonGreen
+                                            .withValues(alpha: 0.5),
+                                        blurRadius: 8,
+                                      ),
+                                    ]
+                                  : [],
+                            ),
+                          );
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
+
+        // Terminal Log
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFF050507),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.borderMuted),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _TerminalLine(
+                prefix: '✓ HapticFlow.play()',
+                text: 'await HapticFlow.play($presetDetails, token: token)',
+                textColor: AppColors.neonGreen,
+              ),
+              _TerminalLine(
+                prefix: 'Timeline Spec',
+                text: timingBreakdown,
+                textColor: Colors.white,
+              ),
+              const Divider(color: Color(0xFF1C1C22), height: 16),
+              _TerminalLine(
+                prefix: 'CancellationToken',
+                text: 'Bound to widget lifecycle: aborts instantly on dispose',
+                textColor: AppColors.cyanAccent,
+              ),
+              _TerminalLine(
+                prefix: 'Driver Layer',
+                text: 'DeviceHapticDriver (Safe no-op on Web/Desktop)',
+                textColor: AppColors.textSecondary,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // TAB 2: Declarative Sequence Builder
+  Widget _buildBuilderTab() {
+    final estDuration = (270 / _speedMultiplier).round();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.spaceBetween,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            Text(
+              '// DECLARATIVE TIMELINE BUILDER WITH SPEED SCALING',
+              style: AppTypography.mono(
+                fontSize: 11,
+                color: AppColors.neonGreen,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Text(
+              'Est Duration: ${estDuration}ms',
+              style: AppTypography.mono(
+                fontSize: 10,
+                color: AppColors.textMuted,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+
+        // Speed Multiplier Chips
+        Row(
+          children: [
+            Text(
+              'Speed Scale: ',
+              style: AppTypography.mono(
+                fontSize: 11,
+                color: AppColors.textSecondary,
+              ),
+            ),
+            const SizedBox(width: 8),
+            _AmountButton(
+              label: '0.8x Slow',
+              isSelected: _speedMultiplier == 0.8,
+              onTap: () => setState(() => _speedMultiplier = 0.8),
+            ),
+            const SizedBox(width: 6),
+            _AmountButton(
+              label: '1.0x Normal',
+              isSelected: _speedMultiplier == 1.0,
+              onTap: () => setState(() => _speedMultiplier = 1.0),
+            ),
+            const SizedBox(width: 6),
+            _AmountButton(
+              label: '1.2x Crisp',
+              isSelected: _speedMultiplier == 1.2,
+              onTap: () => setState(() => _speedMultiplier = 1.2),
+            ),
+            const SizedBox(width: 6),
+            _AmountButton(
+              label: '1.5x Rapid',
+              isSelected: _speedMultiplier == 1.5,
+              onTap: () => setState(() => _speedMultiplier = 1.5),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFF050507),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.borderMuted),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'final score = HapticSequence.builder(\'Payment Approved\')\n'
+                '    .light(duration: const Duration(milliseconds: 40))\n'
+                '    .pause(const Duration(milliseconds: 60))\n'
+                '    .medium(duration: const Duration(milliseconds: 70))\n'
+                '    .heavy(duration: const Duration(milliseconds: 100))\n'
+                '    .scaleSpeed($_speedMultiplier)\n'
+                '    .build();\n\n'
+                'await HapticFlow.play(score, token: cancellationToken);',
+                style: AppTypography.mono(
+                  fontSize: 11,
+                  color: const Color(0xFF7DD3FC),
+                  height: 1.45,
+                ),
+              ),
+              const Divider(color: Color(0xFF1C1C22), height: 16),
+              _TerminalLine(
+                prefix: '✓ Scaled Speed',
+                text: '${(_speedMultiplier * 100).toInt()}% playback rate: $estDuration ms',
+                textColor: AppColors.neonGreen,
+              ),
+              _TerminalLine(
+                prefix: '✓ Threading',
+                text: 'Zero UI jank: non-blocking async Dart event loop',
+                textColor: AppColors.emeraldLive,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // TAB 3: Shorthand Notation
+  Widget _buildNotationTab() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '// COMPACT TACTILE NOTATION STRING & SEQUENCE ALGEBRA',
+          style: AppTypography.mono(
+            fontSize: 11,
+            color: AppColors.neonGreen,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFF050507),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.borderMuted),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _TerminalLine(
+                prefix: 'Notation Pattern',
+                text: 'HapticSequence.fromPattern(\'.-=*_M_H\')',
+                textColor: AppColors.neonGreen,
+              ),
+              const Divider(color: Color(0xFF1C1C22), height: 14),
+              _TerminalLine(
+                prefix: '. or L',
+                text: 'Light pulse (40ms impact)',
+                textColor: AppColors.textPrimary,
+              ),
+              _TerminalLine(
+                prefix: '- or M',
+                text: 'Medium pulse (70ms impact)',
+                textColor: AppColors.textPrimary,
+              ),
+              _TerminalLine(
+                prefix: '= or H',
+                text: 'Heavy pulse (100ms impact)',
+                textColor: AppColors.textPrimary,
+              ),
+              _TerminalLine(
+                prefix: '* or S',
+                text: 'Selection click (15ms precision)',
+                textColor: AppColors.textPrimary,
+              ),
+              _TerminalLine(
+                prefix: '~ or V',
+                text: 'Vibrate waveform (150ms rumble)',
+                textColor: AppColors.textPrimary,
+              ),
+              _TerminalLine(
+                prefix: '_',
+                text: 'Rest interval pause (80ms silence)',
+                textColor: AppColors.textMuted,
+              ),
+              const Divider(color: Color(0xFF1C1C22), height: 14),
+              _TerminalLine(
+                prefix: 'Operator +',
+                text: '(intro + outro) -> Seamless multi-stage score concatenation',
+                textColor: AppColors.cyanAccent,
+              ),
+              _TerminalLine(
+                prefix: 'Operator *',
+                text: '(intro * 3) -> Clean motif loop repetition',
+                textColor: AppColors.cyanAccent,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // TAB 4: Widgets & Mock Testing
+  Widget _buildWidgetsAndTestingTab() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.spaceBetween,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            Text(
+              '// HAPTICSLIDER DETENTS & MOCKHAPTICDRIVER AUDIT',
+              style: AppTypography.mono(
+                fontSize: 11,
+                color: AppColors.neonGreen,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Text(
+              'Detents: Every 10.0',
+              style: AppTypography.mono(
+                fontSize: 10,
+                color: AppColors.textMuted,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+
+        // Interactive Slider
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: const Color(0xFF0E0E14),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFF22222E)),
+          ),
+          child: Row(
+            children: [
+              Text(
+                '0',
+                style: AppTypography.mono(fontSize: 11, color: AppColors.textMuted),
+              ),
+              Expanded(
+                child: SliderTheme(
+                  data: SliderThemeData(
+                    activeTrackColor: AppColors.neonGreen,
+                    inactiveTrackColor: const Color(0xFF2A2A38),
+                    thumbColor: Colors.white,
+                    overlayColor: AppColors.neonGreen.withValues(alpha: 0.2),
+                    thumbShape:
+                        const RoundSliderThumbShape(enabledThumbRadius: 7),
+                  ),
+                  child: Slider(
+                    value: _sliderValue,
+                    min: 0.0,
+                    max: 100.0,
+                    divisions: 10,
+                    onChanged: (val) {
+                      setState(() {
+                        _sliderValue = val;
+                        _recordedEvents++;
+                      });
+                    },
+                  ),
+                ),
+              ),
+              Text(
+                '100',
+                style: AppTypography.mono(fontSize: 11, color: AppColors.textMuted),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
+
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFF050507),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.borderMuted),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _TerminalLine(
+                prefix: 'Slider Detent',
+                text: 'Position: ${_sliderValue.toInt()} / 100 ${_sliderValue == 50.0 ? "(CENTER SNAP BUMP ✨)" : ""}',
+                textColor: _sliderValue == 50.0 ? AppColors.neonGreen : Colors.white,
+              ),
+              _TerminalLine(
+                prefix: 'MockDriver Log',
+                text: 'Recorded $_recordedEvents tactile invocations without platform errors',
+                textColor: AppColors.cyanAccent,
+              ),
+              const Divider(color: Color(0xFF1C1C22), height: 14),
+              _TerminalLine(
+                prefix: 'HapticScrollPhysics',
+                text: 'Fires boundary collision snap on list edges & detents every 80px',
+                textColor: AppColors.textSecondary,
+              ),
+              _TerminalLine(
+                prefix: 'Unit Test Status',
+                text: '100% deterministic test coverage via MockHapticDriver',
+                textColor: AppColors.emeraldLive,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _PresetButton extends StatelessWidget {
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _PresetButton({
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? AppColors.neonGreen.withValues(alpha: 0.15)
+              : const Color(0xFF141418),
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(
+            color: isSelected ? AppColors.neonGreen : AppColors.border,
+          ),
+        ),
+        child: Text(
+          label,
+          style: AppTypography.monoBold(
+            fontSize: 10,
+            color: isSelected ? AppColors.neonGreen : AppColors.textSecondary,
+          ),
+        ),
+      ),
     );
   }
 }

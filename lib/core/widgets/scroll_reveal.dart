@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 /// Smooth entrance animation that slides up and fades in with optional staggered delay.
@@ -27,6 +28,7 @@ class _ScrollRevealState extends State<ScrollReveal>
   late final Animation<double> _opacity;
   late final Animation<Offset> _slide;
   bool _hasStarted = false;
+  Timer? _delayTimer;
 
   @override
   void initState() {
@@ -51,7 +53,7 @@ class _ScrollRevealState extends State<ScrollReveal>
       _controller.forward();
       _hasStarted = true;
     } else {
-      Future.delayed(widget.delay, () {
+      _delayTimer = Timer(widget.delay, () {
         if (mounted && !_hasStarted) {
           _controller.forward();
           _hasStarted = true;
@@ -62,6 +64,7 @@ class _ScrollRevealState extends State<ScrollReveal>
 
   @override
   void dispose() {
+    _delayTimer?.cancel();
     _controller.dispose();
     super.dispose();
   }

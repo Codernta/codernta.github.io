@@ -42,8 +42,8 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
         'yearsLabel': 'Years Exp',
         'apps': '7+',
         'appsLabel': 'Live Apps',
-        'pkg': '1',
-        'pkgLabel': 'Pub.dev Pkg',
+        'pkg': '2',
+        'pkgLabel': 'Pub.dev Pkgs',
       },
       contactLinks: {
         'email': 'codernta@gmail.com',
@@ -52,7 +52,9 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
         'linkedin': 'https://linkedin.com/in/codernta',
         'medium': 'https://medium.com/@codernta',
         'portfolio': 'https://codernta.github.io',
-        'pubdev': 'https://pub.dev/packages/bharat_fx',
+        'pubdev': 'https://pub.dev/packages/haptic_flow',
+        'pubdev_haptic_flow': 'https://pub.dev/packages/haptic_flow',
+        'pubdev_bharat_fx': 'https://pub.dev/packages/bharat_fx',
         'resume':
             'https://drive.google.com/file/d/1wMiyYuUR3z7vXSxuu8vPeeqrUaXyOCao/view?usp=sharing',
       },
@@ -212,6 +214,142 @@ class PortfolioLocalDataSourceImpl implements PortfolioLocalDataSource {
   @override
   Future<List<OpenSourcePackageModel>> getOpenSourcePackages() async {
     return const [
+      OpenSourcePackageModel(
+        title: 'haptic_flow 📳',
+        subtitle:
+            'A Declarative Haptic Choreography Engine for Flutter & Mobile Apps',
+        badgeLabel: 'PUB.DEV PACKAGE AUTHOR // TACTILE CHOREOGRAPHY & REALISM',
+        description:
+            'haptic_flow is a production-grade, declarative haptic choreography engine for Flutter that brings true tactile realism to mobile applications. Standard Flutter haptics are limited to isolated clicks; haptic_flow introduces rhythmic timeline scheduling with cancellation tokens, real-world physical presets (Mechanical Safe Dials, Heartbeats, Typewriters, Success Snaps), tactile widgets (HapticSlider, HapticPickerWheel), dynamic HapticScrollPhysics, decoupled mock drivers for 100% test coverage, and zero third-party runtime dependencies.',
+        tags: [
+          'Flutter & Pure Dart',
+          'v0.1.1 on pub.dev',
+          '100% Zero-Dependency',
+          'Tactile Realism & Physics',
+          'Rhythmic Timelines',
+          'CancellationToken Safe',
+          'Physical Presets',
+          'HapticSlider & Picker',
+          'HapticScrollPhysics',
+          '100% Mock Testing',
+          'MIT License',
+        ],
+        complianceBadges: [
+          'Zero Runtime Dependencies',
+          'Platform Safe No-Op',
+          'CancellationToken Safe',
+          '100% Mock Testable',
+          'HapticFeedbackBoundary Muting',
+          'Pure Dart Engine',
+        ],
+        license: 'MIT',
+        isDependencyFree: true,
+        pubDevUrl: 'https://pub.dev/packages/haptic_flow',
+        repositoryUrl: 'https://github.com/Codernta/haptic_flow',
+        moduleHighlights: [
+          PackageModuleHighlight(
+            title: 'Rhythmic Timeline Scheduling & Cancellation',
+            icon: '⏱️',
+            moduleClass: 'HapticTimeline & CancellationToken',
+            summary:
+                'Frame-accurate multi-stage rhythmic choreographies with cooperative cancellation tokens to eliminate orphaned haptic pulses on unmount.',
+            bulletPoints: [
+              'Rhythmic Choreography: Compose complex tactile sequences with precise millisecond step durations and rest intervals.',
+              'CancellationToken: Safely abort running patterns when users quickly dismiss modals, switch tabs, or cancel gestures.',
+              'Dynamic Speed & Scaling: Modifiers to speed up (.scaleSpeed(1.2)) or damp intensity based on device or user settings.',
+            ],
+            codeSnippet:
+                'final token = CancellationToken();\n\n// Start rhythmic sequence with instant cancellation support\nfinal sequence = HapticSequence.builder(\'Custom Pattern\')\n    .light(duration: const Duration(milliseconds: 40))\n    .pause(const Duration(milliseconds: 60))\n    .heavy(duration: const Duration(milliseconds: 100))\n    .scaleSpeed(1.2)\n    .build();\n\nawait HapticFlow.play(sequence, token: token);\n// On screen pop or gesture cancel: token.cancel();',
+          ),
+          PackageModuleHighlight(
+            title: 'Real-World Physical Tactile Presets',
+            icon: '🎛️',
+            moduleClass: 'HapticPresets',
+            summary:
+                'Curated sensory presets mimicking mechanical dials, biological heartbeats, vintage typewriters, and affirmative snaps.',
+            bulletPoints: [
+              'mechanicalDial: Crisp rotary tumblers with fine settling detents for wheels and numeric steppers.',
+              'heartbeat: Two-stage biological cardiac rhythm (lub-dub) with diastolic resting pause.',
+              'typewriter: Sharp metal typebar impact followed immediately by mechanical carriage escapement.',
+              'successSnap & errorAlarm: Two-stage confirmatory snap for transactions and distinct alarm vibrations for errors.',
+              'diceRoll: Exponentially decelerating tumbling dice impacts.',
+            ],
+            codeSnippet:
+                '// Bring your app to life with curated physical presets\nawait HapticFlow.play(HapticPresets.mechanicalDial);\nawait HapticFlow.play(HapticPresets.heartbeat);\nawait HapticFlow.play(HapticPresets.successSnap);\nawait HapticFlow.play(HapticPresets.typewriter);\nawait HapticFlow.play(HapticPresets.diceRoll);',
+          ),
+          PackageModuleHighlight(
+            title: 'Tactile Interactive UI Widgets',
+            icon: '🎚️',
+            moduleClass: 'HapticSlider & HapticPickerWheel',
+            summary:
+                'Drop-in tactile widgets with customizable detents, center snaps, rotary tumblers, and edge collision bumps.',
+            bulletPoints: [
+              'HapticSlider: Tactile detent intervals (e.g. every 10 units), distinct center snap bump, and boundary edge bumps.',
+              'HapticPickerWheel: Simulates physical rotary tumbler clicks as items rotate past the selection lens.',
+              'HapticGestureDetector: Maps taps, double taps, and long presses to calibrated sensory pulses.',
+            ],
+            codeSnippet:
+                'HapticSlider(\n  value: _volume,\n  min: 0.0,\n  max: 100.0,\n  detentInterval: 10.0,      // Subtle tick every 10 units\n  centerDetentValue: 50.0,   // Distinct snap at center\n  onChanged: (val) => setState(() => _volume = val),\n);',
+          ),
+          PackageModuleHighlight(
+            title: 'Dynamic HapticScrollPhysics',
+            icon: '📜',
+            moduleClass: 'HapticScrollPhysics',
+            summary:
+                'Drop-in scroll physics providing physical collision bumps on boundary edges, overscroll springs, and distance detents.',
+            bulletPoints: [
+              'Boundary Collisions: Distinct haptic snap when colliding with top/bottom scroll edges or overscrolling.',
+              'Distance Detents: Fires rhythmic tactile feedback per configured distance traveled (e.g. every 80px scrolled).',
+              'Composable: Seamlessly wraps BouncingScrollPhysics, ClampingScrollPhysics, or CustomScrollView physics.',
+            ],
+            codeSnippet:
+                'ListView.builder(\n  physics: const HapticScrollPhysics(\n    detentDistance: 80.0,    // Tactile tick every 80px scrolled\n    triggerAtEdges: true,    // Distinct feedback when hitting edges\n    parent: BouncingScrollPhysics(),\n  ),\n  itemCount: 100,\n  itemBuilder: (context, index) => ListTile(title: Text(\'Item \$index\')),\n);',
+          ),
+          PackageModuleHighlight(
+            title: 'Shorthand Tactile Notation & Arithmetic Composition',
+            icon: '🎼',
+            moduleClass: 'HapticSequence.fromPattern & Operators',
+            summary:
+                'Expressive tactile notation strings (.-=*_M_H) and arithmetic sequence algebra (+ and *) for rapid sensory prototyping.',
+            bulletPoints: [
+              'Compact Notation: Compose sequences using characters: . (light), - (medium), = (heavy), * (selection click), ~ (vibrate), _ (pause).',
+              'Arithmetic Concatenation (+): Chain multiple sub-sequences seamlessly (intro + finale).',
+              'Multiplication (*): Repeat tactile motifs without loops (score * 3).',
+            ],
+            codeSnippet:
+                '// Notation: . or L = light, - or M = medium, = or H = heavy, _ = pause\nfinal score = HapticSequence.fromPattern(\n  \'.-=*_M_H\',\n  tickDuration: const Duration(milliseconds: 50),\n  pauseDuration: const Duration(milliseconds: 80),\n);\n// Arithmetic composition\nfinal song = (score * 2) + HapticPresets.successSnap;\nawait HapticFlow.play(song);',
+          ),
+          PackageModuleHighlight(
+            title: 'Clean Architecture & 100% Mock Testing',
+            icon: '🧪',
+            moduleClass: 'HapticDriver & MockHapticDriver',
+            summary:
+                'Decoupled driver architecture enabling deterministic unit and widget testing without native platform channel errors.',
+            bulletPoints: [
+              'Decoupled HapticDriver: Isolates Flutter platform channels behind an extensible interface.',
+              'Bundled MockHapticDriver: Records calls and enables 100% unit and widget test coverage.',
+              'Zero Platform Crashes: Gracefully falls back to safe no-ops on web and unsupported desktop environments.',
+              'Zero Dependencies: Pure Dart and Flutter with strict security sanitization and zero third-party dependencies.',
+            ],
+            codeSnippet:
+                'test(\'verifies custom choreography triggers in order\', () async {\n  final mockDriver = MockHapticDriver();\n  final controller = HapticFlowController(driver: mockDriver);\n  await controller.play(HapticPresets.successSnap);\n  expect(mockDriver.invocations.length, 2);\n  expect(mockDriver.invocations.first.type, HapticPulseType.light);\n});',
+          ),
+          PackageModuleHighlight(
+            title: 'Accessibility & Scoped Boundaries',
+            icon: '♿',
+            moduleClass: 'HapticFeedbackBoundary',
+            summary:
+                'Respects user sensory preferences with granular scoped muting, scaling, and system-wide master toggle control.',
+            bulletPoints: [
+              'Scoped Boundaries: Mute or attenuate haptics for specific subtrees (e.g. background feeds or low battery modes).',
+              'Global Master Switch: Instantly enable or disable haptics app-wide via HapticFlow.enabled.',
+              'Respects OS Accessibility: Automatically integrates with OS-level haptic preferences.',
+            ],
+            codeSnippet:
+                '// Mute haptics within a specific widget subtree\nHapticFeedbackBoundary(\n  enabled: false,\n  child: NonInteractiveWidget(),\n);\n\n// Or globally toggle haptics\nHapticFlow.enabled = false;',
+          ),
+        ],
+      ),
       OpenSourcePackageModel(
         title: 'Bharat FX 🇮🇳',
         subtitle:

@@ -109,7 +109,10 @@ class FooterSection extends StatelessWidget {
         _buildFooterLink('About Me', () {}),
         _buildFooterLink('Core Capabilities', () {}),
         _buildFooterLink('Live Projects', () {}),
-        _buildFooterLink('Pub.dev Package', () {
+        _buildFooterLink('Pub.dev: haptic_flow (v0.1.1)', () {
+          UrlLauncherHelper.launchUrl('https://pub.dev/packages/haptic_flow');
+        }),
+        _buildFooterLink('Pub.dev: bharat_fx', () {
           UrlLauncherHelper.launchUrl('https://pub.dev/packages/bharat_fx');
         }),
         _buildFooterLink('Download CV / Resume', () {
